@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -87,7 +87,33 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
+    print "Start:", problem.getStartState()
+    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
+    print "Start's successors:", problem.getSuccessors(problem.getStartState())
+    #print type(problem) = instance
+    #print type(problem.getSuccessors(problem.getStartState())) = list
+    #print "get cost of action:", problem.getCostOfActions()
+    #print "get pacman state:", problem.getPacmanState()
     util.raiseNotDefined()
+    #open_list = PriorityQueue()
+    #successors_list = [] #use a list at the moment
+    #return dfs_helper(problem, open_list, successors_list, goal_bool)
+
+def dfs_helper(problem, open_list, successors_list, goal_bool):
+    '''
+    Helper function for DFS search
+    '''
+    
+    open_list.push(problem.getSuccessors().successor, problem.getSuccessors().stepCost )
+    while not open_list.empty():
+        n = open_list.pop()
+        if n.isGoalState():
+            return n
+        for succ in successors_list:
+            if not succ in n
+                open_list.push(<n, succ>)
+    return False
+
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
