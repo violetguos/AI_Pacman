@@ -94,24 +94,33 @@ def depthFirstSearch(problem):
     #print type(problem.getSuccessors(problem.getStartState())) = list
     #print "get cost of action:", problem.getCostOfActions()
     #print "get pacman state:", problem.getPacmanState()
-    util.raiseNotDefined()
-    #open_list = PriorityQueue()
-    #successors_list = [] #use a list at the moment
-    #return dfs_helper(problem, open_list, successors_list, goal_bool)
+    #util.raiseNotDefined()
+    open_list = []#util.PriorityQueue()
+    successors_list = [] #use a list at the moment
+    goal_bool = problem.isGoalState(problem.getStartState())
+    return dfs_helper(problem, open_list, successors_list, goal_bool)
 
 def dfs_helper(problem, open_list, successors_list, goal_bool):
     '''
     Helper function for DFS search
     '''
-    
-    open_list.push(problem.getSuccessors().successor, problem.getSuccessors().stepCost )
-    while not open_list.empty():
+    open_list.append(problem.getStartState()) #default zero priority or cost
+    print "open_list ", open_list
+    while len(open_list) != 0: #hack to check if empty
         n = open_list.pop()
-        if n.isGoalState():
+        print "n = ", n
+        if problem.isGoalState(n):
             return n
-        for succ in successors_list:
-            if not succ in n
-                open_list.push(<n, succ>)
+        successors_list = problem.getSuccessors(n)
+        print "successors_list ", successors_list
+        #extract only the position info
+        successor_pos = []
+        for i in successors_list:
+            successor_pos.append(i[0])
+        for succ in successor_pos:
+            if not succ in n:
+                #calculae the priority
+                open_list.append((n, succ))
     return False
 
 
