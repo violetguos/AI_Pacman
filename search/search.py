@@ -89,49 +89,44 @@ def depthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
 
     open_list = util.Stack()
-
-    return dfs_helper(problem, open_list)
-
-
-def dfs_helper(problem, open_list):
-    '''
-    Helper function for DFS search
-    '''
-    #open_list_push(open_list, problem.getStartState(), 0, [])
     start = (problem.getStartState(), 0, [])
     open_list.push(start)
     visited = set()
-    #visited.add(start[0])
-    #print "open_list ", open_list
-    while not open_list.isEmpty(): #hack to check if empty
-        (node, cost, path) = open_list.pop() #node cost path
-        state = node
+    # visited.add(start[0])
+    # print "open_list ", open_list
+    while not open_list.isEmpty():  # hack to check if empty
+        (node, cost, path) = open_list.pop()  # node cost path
+        visited.add(node)
 
-        #print "path = ", path
-        if(problem.isGoalState(state)):
+        state = node
+        # print "path = ", path
+        if (problem.isGoalState(state)):
             return path
         successor = problem.getSuccessors(state)
         for succ_node, succ_action, succ_cost in successor:
-            if not succ_node in visited: #not visited yet
+            if not succ_node in visited:  # not visited yet
                 #print "succ node, ", succ_node
-                #print "path = ", path
+                # print "path = ", path
                 new_cost = cost + succ_cost
                 new_node = succ_node
                 new_path = path + [succ_action]
                 new_state = (new_node, new_cost, new_path)
-                visited.add(succ_node)
                 open_list.push(new_state)
-    return [] #no solution case
+    return []  # no solution case
 
-def bfs_helper(problem, open_list):
+
+def breadthFirstSearch(problem):
+    """Search the shallowest nodes in the search tree first."""
+
+    open_list = util.Queue()
     start = (problem.getStartState(), 0, [])
     open_list.push(start)
     visited = set()
-    visited.add(start[0])
     # print "open_list ", open_list
     while not open_list.isEmpty():  # hack to check if empty
         (node, cost, path) = open_list.pop()  # node cost path
         state = node
+        visited.add(state)
 
         # print "path = ", path
         if (problem.isGoalState(state)):
@@ -145,26 +140,21 @@ def bfs_helper(problem, open_list):
                 new_node = succ_node
                 new_path = path + [succ_action]
                 new_state = (new_node, new_cost, new_path)
-                visited.add(succ_node)
                 open_list.push(new_state)
     return []  # no solution case
 
-def breadthFirstSearch(problem):
-    """Search the shallowest nodes in the search tree first."""
-
-    open_list = util.Queue()
-
-    return bfs_helper(problem, open_list)
 
 
 def ucs_helper(problem, open_list, cost):
     open_list.push((problem.getStartState(),[]),0)
     visited = set()
     while not open_list.isEmpty():
-        state, path = open_list.pop()
-        if problem.isGoalState(state):
+        (node, cost, path) = open_list.pop()
+        visited.add(node)
+
+        if problem.isGoalState(node):
             return path
-        successor = problem.getSuccessors(state)
+        successor = problem.getSuccessors(node)
         for succ_node, succ_action, succ_cost in successor:
             if not succ_node in visited:  # not visited yet
                 #print "succ node, ", succ_node
@@ -173,13 +163,14 @@ def ucs_helper(problem, open_list, cost):
                 new_node = succ_node
                 new_path = path + [succ_action]
                 new_state = new_node
-                visited.add(succ_node)
                 open_list.push((new_state, new_path), new_cost)
     return []
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     open_list = util.PriorityQueue()
+
+
     return ucs_helper(problem, open_list, 0)
 
 
@@ -198,6 +189,8 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     visited = set()
     while not open_list.isEmpty():
         (state, path) = open_list.pop()
+        visited.add(state)
+
         if problem.isGoalState(state):
             return path
         successor = problem.getSuccessors(state)
@@ -209,7 +202,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 new_node = succ_node
                 new_path = path + [succ_action]
                 new_state = new_node
-                visited.add(succ_node)
                 open_list.push((new_state, new_path), new_cost)
     return
 
