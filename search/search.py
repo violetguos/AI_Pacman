@@ -155,28 +155,29 @@ def breadthFirstSearch(problem):
 def ucs_helper(problem, open_list):
     start = (problem.getStartState(),0,[])
     open_list.push(start , 0)
-    visited = set()
-    visited.add(problem.getStartState())
+    visited = {}
+    visited.update({problem.getStartState():0})
+
     while not open_list.isEmpty():
         state = open_list.pop() #state = node, cost, path
-        #visited.add(node)
         node = state[0]
         cost = state[1]
         path = state[2]
-        if problem.isGoalState(node):
-            return path
-        successor = problem.getSuccessors(node)
+        if cost <= visited[node]:
+            if problem.isGoalState(node):
+                return path
+            successor = problem.getSuccessors(node)
 
-        for succ_node, succ_action, succ_cost in successor:
-            if not succ_node in visited:  # not visited yet
-                #print "succ node, ", succ_node
-                #print "path = ", path
+            for succ_node, succ_action, succ_cost in successor:
                 new_cost = cost + succ_cost
-                new_node = succ_node
-                new_path = path + [succ_action]
-                new_state = (new_node, new_cost, new_path)
-                open_list.push(new_state, new_cost)
-                visited.add(succ_node)
+                if not succ_node in visited or new_cost < visited[succ_node]:  # not visited yet
+                    #print "succ node, ", succ_node
+                    #print "path = ", path
+                    new_node = succ_node
+                    new_path = path + [succ_action]
+                    new_state = (new_node, new_cost, new_path)
+                    open_list.push(new_state, new_cost)
+                    visited.update({succ_node:new_cost})
 
     return []
 
@@ -193,38 +194,42 @@ def nullHeuristic(state, problem=None):
     """
     return 0
 
-def aStar_helper(problem, open_list, heuristic):
-    start = (problem.getStartState(), [])
-    open_list.push(start, nullHeuristic(problem))
-    visited = set()
-    visited.add(problem.getStartState())
-    while not open_list.isEmpty():
-        # visited.add(state)
-        state = open_list.pop()
-        node = state[0]
-        path = state[1]
-        # path = state[2]
-        if problem.isGoalState(node):
-            return path
 
-        successor = problem.getSuccessors(node)
-        for succ_node, succ_action, succ_cost in successor:
-            if not succ_node in visited:  # not visited yet
-                # print "succ node, ", succ_node
-                # print "path = ", path
-                new_cost = succ_cost + heuristic(node, problem)
-                new_node = succ_node
-                new_path = path + [succ_action]
-                new_state = (new_node, new_path)  # (new_node, new_cost, new_path)
-                open_list.push(new_state, new_cost)
-                visited.add(succ_node)
-
-    return []
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     open_list = util.PriorityQueue()
-    return aStar_helper(problem, open_list, heuristic)
+    start = (problem.getStartState(), [], 0)
+    start_h = heuristic(start[0], problem=problem)
+    open_list.push(start, start_h)
+
+    visited = {}
+    visited.update({problem.getStartState():0})
+    while not open_list.isEmpty():
+        state = open_list.pop()
+        node = state[0]
+        path = state[1]
+
+        cost = state[2] #problem.getCostOfActions(path)
+        if cost <= visited[node]:
+            if problem.isGoalState(node):
+                return path
+            successor = problem.getSuccessors(node)
+            for succ_node, succ_action, succ_cost in successor:
+                #s_cost = problem.getCostOfActions(path + [succ_action])  + heuristic(node, problem=problem)  # succ_cost + problem.getCostOfActions(path)\
+
+                g_cost = cost + succ_cost #problem.getCostOfActions(path + [succ_action]) #path to succ node
+                if not succ_node in visited or g_cost < visited[succ_node]:  # not visited yet
+                    # print "succ node, ", succ_node
+                    # print "path = ", path
+                    new_cost = cost + succ_cost
+                    new_fcost = g_cost + heuristic(succ_node, problem=problem)  # succ_cost + problem.getCostOfActions(path)\
+                    new_node = succ_node
+                    new_path = path + [succ_action]
+                    new_state = (new_node, new_path, new_cost)  # (new_node, new_cost, new_path)
+                    open_list.push(new_state, new_fcost)
+                    visited.update({succ_node:g_cost})
+    return []
 
 
 # Abbreviations

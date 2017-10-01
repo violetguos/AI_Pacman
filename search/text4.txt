@@ -1,59 +1,14 @@
-Starting on 9-28 at 11:40:16
+Starting on 10-1 at 9:20:19
 
 Question q4
 ===========
 
-*** FAIL: test_cases/q4/astar_0.test
-*** 	graph:
-*** 	              C
-*** 	              ^
-*** 	              | 2
-*** 	         2    V   4 
-*** 	    *A <----> B -----> [H]
-*** 	              | 
-*** 	         1.5  V  2.5
-*** 	     G <----- D -----> E
-*** 	              |
-*** 	            2 | 
-*** 	              V
-*** 	             [F]
-*** 	    
-*** 	    A is the start state, F and H is the goal.  Arrows mark possible state 
-*** 	    transitions.  The number next to the arrow is the cost of that transition.
-*** 	student solution:		['Right', 'Down', 'Down']
-*** 	student expanded_states:	['A', 'B', 'D', 'G', 'C']
-*** 
-*** 	correct solution:		['Right', 'Down', 'Down']
-*** 	correct expanded_states:	['A', 'B', 'D', 'C', 'G']
-*** 	correct rev_solution:		['Right', 'Down', 'Down']
-*** 	correct rev_expanded_states:	['A', 'B', 'D', 'C', 'G']
-*** FAIL: test_cases/q4/astar_1_graph_heuristic.test
-*** 	graph:
-*** 	         2     3     2
-*** 	      S --- A --- C ---> G
-*** 	      | \       /       ^
-*** 	    3 |  \ 5   / 1     / 
-*** 	      |   \   /       / 
-*** 	      B --- D -------/
-*** 	         4         5  
-*** 	    
-*** 	    S is the start state, G is the goal.  Arrows mark possible state 
-*** 	    transitions.  The number next to the arrow is the cost of that transition.
-*** 	    
-*** 	    The heuristic value of each state is:
-*** 	    	S 6.0
-*** 	    	A 2.5
-*** 	    	B 5.25
-*** 	    	C 1.125
-*** 	    	D 1.0625
-*** 	    	G 0
-*** 	student solution:		['0', '0', '2']
-*** 	student expanded_states:	['S', 'A', 'C']
-*** 
-*** 	correct solution:		['0', '0', '2']
-*** 	correct expanded_states:	['S', 'A', 'D', 'C']
-*** 	correct rev_solution:		['0', '0', '2']
-*** 	correct rev_expanded_states:	['S', 'A', 'D', 'C']
+*** PASS: test_cases/q4/astar_0.test
+*** 	solution:		['Right', 'Down', 'Down']
+*** 	expanded_states:	['A', 'B', 'D', 'C', 'G']
+*** PASS: test_cases/q4/astar_1_graph_heuristic.test
+*** 	solution:		['0', '0', '2']
+*** 	expanded_states:	['S', 'A', 'D', 'C']
 Actions in vector,  North
 Actions in vector,  South
 Actions in vector,  East
@@ -374,72 +329,594 @@ Actions in vector,  North
 Actions in vector,  South
 Actions in vector,  East
 Actions in vector,  West
-*** FAIL: test_cases/q4/astar_2_manhattan.test
-*** Solution not correct.
-*** 	student solution length: 74
-*** 	student solution:
-South South West West West West South South East East East East South
-South West West West West South South East East East East South South
-West West West West South South East East East East South South South
-West West West West West West West North West West West West West West
-West West West West West West West West West West West South West West
-West West West West West West West
-*** 
-*** 	correct solution length: 68
-*** 	correct (reversed) solution length: 68
-*** 	correct solution:
-West West West West West West West West West South South East East
-South South South West West West North West West West West South South
-South East East East East East East East South South South South South
-South South West West West West West West West West West West West
-West West West West West West South West West West West West West West
-West West
-*** 	correct (reversed) solution:
-West West West West West West West West West South South East East
-South South South West West West North West West West West South South
-South East East East East East East East South South South South South
-South South West West West West West West West West West West West
-West West West West West West South West West West West West West West
-West West
-*** FAIL: test_cases/q4/astar_3_goalAtDequeue.test
-*** 	graph:
-*** 	        1      1      1
-*** 	    *A ---> B ---> C ---> [G]
-*** 	     |                     ^
-*** 	     |         10          |
-*** 	     \---------------------/
-*** 	    
-*** 	    A is the start state, G is the goal.  Arrows mark possible state 
-*** 	    transitions.  The number next to the arrow is the cost of that transition.
-*** 	    
-*** 	    If you fail this test case, you may be incorrectly testing if a node is a goal 
-*** 	    before adding it into the queue, instead of testing when you remove the node 
-*** 	    from the queue.  See the algorithm pseudocode in lecture.
-*** 	student solution:		['0:A->G']
-*** 	student expanded_states:	['A', 'B', 'C']
-*** 
-*** 	correct solution:		['1:A->B', '0:B->C', '0:C->G']
-*** 	correct expanded_states:	['A', 'B', 'C']
-*** 	correct rev_solution:		['1:A->B', '0:B->C', '0:C->G']
-*** 	correct rev_expanded_states:	['A', 'B', 'C']
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+Actions in vector,  North
+Actions in vector,  South
+Actions in vector,  East
+Actions in vector,  West
+*** PASS: test_cases/q4/astar_2_manhattan.test
+*** 	pacman layout:		mediumMaze
+*** 	solution length: 68
+*** 	nodes expanded:		221
+*** PASS: test_cases/q4/astar_3_goalAtDequeue.test
+*** 	solution:		['1:A->B', '0:B->C', '0:C->G']
+*** 	expanded_states:	['A', 'B', 'C']
 *** PASS: test_cases/q4/graph_backtrack.test
 *** 	solution:		['1:A->C', '0:C->G']
 *** 	expanded_states:	['A', 'B', 'C', 'D']
 *** PASS: test_cases/q4/graph_manypaths.test
 *** 	solution:		['1:A->C', '0:C->D', '1:D->F', '0:F->G']
 *** 	expanded_states:	['A', 'B1', 'C', 'B2', 'D', 'E1', 'F', 'E2']
-*** Tests failed.
 
-### Question q4: 0/3 ###
+### Question q4: 3/3 ###
 
 
-Finished at 11:40:16
+Finished at 9:20:19
 
 Testing Results (grades subject to additional tests after submission)
 ==================
-Question q4: 0/3
+Question q4: 3/3
 ------------------
-Total: 0/3
+Total: 3/3
 
 TO OBTAIN MARKS YOU MUST SUBMIT YOUR CODE USING MarkUs.
 
