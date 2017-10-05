@@ -41,6 +41,9 @@ import util
 import time
 import search
 
+import itertools
+
+
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
 
@@ -290,8 +293,10 @@ class CornersProblem(search.SearchProblem):
         self.cornersStartState = []
         for corner in self.corners:
             if self.startingPosition == corner:
+                ##already visited
                 self.cornersStartState.append((corner, False))
             else:
+                #usually not visited
                 self.cornersStartState.append((corner, True))
 
         self.cornersStartState = tuple(self.cornersStartState)
@@ -384,30 +389,24 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    stateOfCorners = state[1]
-    closetDist = None
-    dotCount = 0
-    for corner in stateOfCorners:
-        dotPos = corner[0]
-        dotExist = corner[1]
-
-        if dotExist:
-            x1 = dotPos[0]
-            y1 = dotPos[1]
-            x2 = state[0][0]
-            y2 = state[0][1]
-            dist = abs(x1 - x2) + abs(y1-y2)
-            if closetDist is None:
-                closetDist = dist
-            elif dist < closetDist:
-                closetDist = dist
+    # manhattan distance between 2
+    #keep track of visited or no
+    #return 0 at the end
+    visited =0
+    not_visited = []
+    for corner_state in state[1]:
+        #print "corner state", corner_state
+        if corner_state[1] == False:
+            visited +=1
         else:
-            dotCount +=1
-
-    if dotCount == len(corners): #all eaten
+            not_visited.append(corner_state[0])
+    if visited == 4:
         return 0
 
-    return closetDist
+    dist = []
+    for i in not_visited:
+        dist.append(manha_dist(i, state[0]))
+    return max(dist)
 
 
 class AStarCornersAgent(SearchAgent):
@@ -443,7 +442,8 @@ class FoodSearchProblem:
         successors = []
         self._expanded += 1 # DO NOT CHANGE
         for direction in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
-            x,y = state[0]
+            x= state[0][0]
+            y = state[0][1]
             dx, dy = Actions.directionToVector(direction)
             nextx, nexty = int(x + dx), int(y + dy)
             if not self.walls[nextx][nexty]:
@@ -472,9 +472,16 @@ class AStarFoodSearchAgent(SearchAgent):
         self.searchFunction = lambda prob: search.aStarSearch(prob, foodHeuristic)
         self.searchType = FoodSearchProblem
 
-def foodHeuristic(state, problem):
-    """Your heuristic for the FoodSearchProblem goes here.
 
+
+def manha_dist(pos1, pos2):
+    dist = abs(pos1[0] - pos2[0])+ abs(pos1[1] - pos2[1])
+    return dist
+
+
+def foodHeuristic(state, problem):     #minimum tree
+
+    """Your heuristic for the FoodSearchProblem goes here.
     This heuristic must be admissible to ensure correctness.
 
     If using A* ever finds a solution that is worse uniform cost
@@ -498,23 +505,78 @@ def foodHeuristic(state, problem):
     problem.heuristicInfo['wallCount']
 
     """
+    #wall is a matrix of bools,  the index is its position
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
 
-    closetDist = None
-    for foodPos in foodGrid.asList():
-        x1 = foodPos[0]
-        y1 = foodPos[1]
-        x2 = position[0]
-        y2 = position[1]
-        dist = abs(x1 - y1) + abs(x2 - y2)
+    food_list = foodGrid.asList()
 
-        if closetDist == None:
-            closetDist = dist
-        elif dist < closetDist:
-            closetDist = dist
+    #for foodPos in foodGrid.asList():
+    #    for pos_prev in foodGrid.asList():
+    #        if foodPos != pos_prev:
+    #            path = foodbreadthFirstSearch(problem, pos_prev, foodPos, problem.walls)
+    #            path_cost = problem.getCostOfActions(path)
+    #            list1.update({(pos_prev, foodPos):(path, path_cost)})
+    #            list_queue.push((pos_prev, foodPos), path_cost)
+                #print path
+    if len(food_list) ==0:
+        return 0
 
-    return closetDist
+    else:
+        dist = []
+        for i in food_list:
+            dist.append(manha_dist(position, i))
+        return max(dist)
+
+def foodbreadthFirstSearch(gameState, startPos, foodPos, allWall):
+    """Search the shallowest nodes in the search tree first."""
+    #food pos is a list of foods
+
+    open_list = util.Queue()
+    start = (startPos, 0, [])
+    open_list.push(start)
+    visited = set()
+    visited.add(startPos)
+    # print "open_list ", open_list
+    while not open_list.isEmpty():  # hack to check if empty
+        (node, cost, path) = open_list.pop()  # node cost path
+        state = node
+        #visited.add(state)
+
+        # print "path = ", path
+        if isinstance(foodPos, tuple):
+            if node == foodPos:
+                return path
+        if not isinstance(foodPos, tuple):
+            if foodPos[node[0]][node[1]]:
+                return path
+
+        successor_list = []
+        for direction in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+            x = node[0]
+            y = node[1]
+            dx, dy = Actions.directionToVector(direction)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if not allWall[nextx][nexty]:
+                #successor = gameState.generatePacmanSuccessor(direction)
+                #returns the next game state successor
+                succ_position = (nextx, nexty)
+                stepCost = 1
+                succ_state = (succ_position, stepCost, direction)
+                successor_list.append(succ_state)
+                #print "successors: ", successor.getPacmanPosition()
+
+        for succ_node, succ_cost, succ_action in successor_list:
+            if not succ_node in visited:  # not visited yet
+                #print "succ node, ", succ_node
+                #print "path = ", path
+                new_cost = cost + succ_cost
+                new_node = succ_node
+                new_path = path + [succ_action]
+                new_state = (new_node, new_cost, new_path)
+                open_list.push(new_state)
+                visited.add(succ_node)
+    return []  # no solution case
 
 
 class ClosestDotSearchAgent(SearchAgent):
@@ -540,20 +602,22 @@ class ClosestDotSearchAgent(SearchAgent):
         gameState.
         """
         # Here are some useful elements of the startState
-        startPosition = gameState.getPacmanPosition()
-        food = gameState.getFood()
-        walls = gameState.getWalls()
-        problem = AnyFoodSearchProblem(gameState)
 
-        closetDist = None
-        for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
 
-        for foodPos in food:
-            dist = abs(foodPos[0] - startPosition[0]) + abs(foodPos[1] - startPosition[1])
-            if closetDist == None:
-                closetDist = dist
-            elif dist < closetDist:
-                closetDist = dist
+        #BFS/Dijisktra
+        #a spiral going out, if encounter food, terminate
+        all_food = gameState.getFood().data
+        print "all food,,,..", all_food
+        print "all fodd", type(all_food)
+        print "a_food type", type(all_food[0][0])
+        all_walls = gameState.getWalls().data
+        print "all wall ", all_walls
+        print "type_all_wall", type(all_walls)
+        current_pos = gameState.getPacmanPosition()
+
+        path = foodbreadthFirstSearch(gameState, current_pos, all_food, all_walls)
+
+        return path
 
 
 
