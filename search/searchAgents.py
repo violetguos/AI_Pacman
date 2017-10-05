@@ -510,7 +510,7 @@ def foodHeuristic(state, problem):     #minimum tree
     "*** YOUR CODE HERE ***"
 
     food_list = foodGrid.asList()
-
+    allwall = problem.walls
     #for foodPos in foodGrid.asList():
     #    for pos_prev in foodGrid.asList():
     #        if foodPos != pos_prev:
@@ -525,11 +525,16 @@ def foodHeuristic(state, problem):     #minimum tree
     else:
         dist = []
         for i in food_list:
-            dist.append(manha_dist(position, i))
+            #dist.append(manha_dist(position, i))
+            path = foodbreadthFirstSearch(position, i, allwall)
+            dist.append(len(path))
         return max(dist)
 
-def foodbreadthFirstSearch( startPos, foodPos, allWall):
-    """Search the shallowest nodes in the search tree first."""
+def foodbreadthFirstSearch(startPos, foodPos, allWall):
+    '''Search the shallowest nodes in the search tree first.
+        It can be used for two points in general
+    '''
+
     #food pos is a list of foods
 
     open_list = util.Queue()
@@ -544,10 +549,10 @@ def foodbreadthFirstSearch( startPos, foodPos, allWall):
         #visited.add(state)
 
         # print "path = ", path
-        if isinstance(foodPos, tuple):
+        if isinstance(foodPos, tuple): #this is point to point search
             if node == foodPos:
                 return path
-        if not isinstance(foodPos, tuple):
+        if not isinstance(foodPos, tuple): #this is to find first in a list of points
             if foodPos[node[0]][node[1]]:
                 return path
 
