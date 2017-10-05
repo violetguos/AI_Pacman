@@ -34,8 +34,8 @@
       <file leaf-file-name="searchAgents.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/searchAgents.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="659" column="16" lean-forward="false" selection-start-line="659" selection-start-column="11" selection-end-line="659" selection-end-column="16" />
+            <state relative-caret-position="221">
+              <caret line="617" column="38" lean-forward="true" selection-start-line="617" selection-start-column="38" selection-end-line="617" selection-end-column="38" />
               <folding>
                 <element signature="e#1354#1381#0" expanded="true" />
               </folding>
@@ -70,6 +70,7 @@
       <find>generatePacmanSuccessor</find>
       <find>applyAction</find>
       <find>generateSuccessor</find>
+      <find>foodbreadthFirstSearch</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -669,8 +670,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/searchAgents.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="659" column="16" lean-forward="false" selection-start-line="659" selection-start-column="11" selection-end-line="659" selection-end-column="16" />
+        <state relative-caret-position="221">
+          <caret line="617" column="38" lean-forward="true" selection-start-line="617" selection-start-column="38" selection-end-line="617" selection-end-column="38" />
           <folding>
             <element signature="e#1354#1381#0" expanded="true" />
           </folding>

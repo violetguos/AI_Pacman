@@ -528,7 +528,7 @@ def foodHeuristic(state, problem):     #minimum tree
             dist.append(manha_dist(position, i))
         return max(dist)
 
-def foodbreadthFirstSearch(gameState, startPos, foodPos, allWall):
+def foodbreadthFirstSearch( startPos, foodPos, allWall):
     """Search the shallowest nodes in the search tree first."""
     #food pos is a list of foods
 
@@ -615,7 +615,7 @@ class ClosestDotSearchAgent(SearchAgent):
         print "type_all_wall", type(all_walls)
         current_pos = gameState.getPacmanPosition()
 
-        path = foodbreadthFirstSearch(gameState, current_pos, all_food, all_walls)
+        path = foodbreadthFirstSearch(current_pos, all_food, all_walls)
 
         return path
 
