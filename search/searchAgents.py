@@ -612,12 +612,12 @@ class ClosestDotSearchAgent(SearchAgent):
         #BFS/Dijisktra
         #a spiral going out, if encounter food, terminate
         all_food = gameState.getFood().data
-        print "all food,,,..", all_food
-        print "all fodd", type(all_food)
-        print "a_food type", type(all_food[0][0])
+        #print "all food,,,..", all_food
+        #print "all fodd", type(all_food)
+        #print "a_food type", type(all_food[0][0])
         all_walls = gameState.getWalls().data
-        print "all wall ", all_walls
-        print "type_all_wall", type(all_walls)
+        #print "all wall ", all_walls
+        #print "type_all_wall", type(all_walls)
         current_pos = gameState.getPacmanPosition()
 
         path = foodbreadthFirstSearch(current_pos, all_food, all_walls)
