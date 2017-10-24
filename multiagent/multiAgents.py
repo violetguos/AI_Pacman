@@ -106,11 +106,69 @@ class MultiAgentSearchAgent(Agent):
         self.evaluationFunction = util.lookup(evalFn, globals())
         self.depth = int(depth)
 
+
 class MinimaxAgent(MultiAgentSearchAgent):
     """
       Your minimax agent (question 2)
     """
 
+    def miniMax(self, state, curr_depth, agent):
+
+        best_move = None
+
+
+        if self.depth == curr_depth:
+            print "when exceed ret enter depth", curr_depth
+            #print "agent_curr, agent_total", agent, state.getNumAgents()
+            #print "score", self.evaluationFunction(state)
+            return self.evaluationFunction(state), best_move
+
+        if agent == state.getNumAgents() and curr_depth < self.depth:
+            # if agent == (state.getNumAgents()-1):
+            print "when exceed agent", curr_depth
+            print "num agent exceed", agent
+            return self.miniMax(state, curr_depth + 1, 0)
+
+        if agent == 0:
+            value = float("-inf")
+        else:
+            value = float("inf")
+        for move in state.getLegalActions(agent):
+            nxt_pos = state.generateSuccessor(agent, move)
+             # agent)
+
+            nxt_val, nxt_move = self.miniMax(nxt_pos, curr_depth, agent + 1)
+
+            if agent == 0 and value < nxt_val:
+                value, best_move = nxt_val, move
+            if agent != 0 and value > nxt_val:
+                value, best_move = nxt_val, move
+        #print "ret value, move", value, best_move
+        print "when ret at bottom", curr_depth
+        return value, best_move
+
+    """
+    def max_agent(self, state, curr_depth):
+        if self.depth == curr_depth:
+            return self.evaluationFunction(state)
+        legal_moves = state.getLegalActions(0)
+        nxt_pos = [state.generateSuccessor(0, move) for move in legal_moves]
+        scores = [self.mini_agent(curr_depth, pos,  1) for pos in nxt_pos]
+
+        return max(scores)
+
+    def mini_agent(self, state, curr_depth, agent_idx):
+        if self.depth == curr_depth:
+            return self.evaluationFunction(state)
+        legal_moves = state.getLegalActions(agent_idx)
+        nxt_pos = [state.generateSuccessor(agent_idx, m) for m in legal_moves]
+        if (agent_idx == state.getNumAgents()):
+            scores = [self.max_agent(pos, curr_depth + 1) for pos in nxt_pos]
+
+        else:
+            scores = [self.mini_agent(curr_depth, pos, agent_idx+1) for pos in nxt_pos]
+        return min(scores)
+    """
     def getAction(self, gameState):
         """
           Returns the minimax action from the current gameState using self.depth
@@ -129,7 +187,25 @@ class MinimaxAgent(MultiAgentSearchAgent):
             Returns the total number of agents in the game
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+
+
+
+        """
+        legalMoves = gameState.getLegalActions(self.index)
+
+        resultStates = [gameState.generateSuccessor(0, action) for action in legalMoves]
+
+        # get scores from minimizer
+        scores = [self.mini_agent(state,0, 1) for state in resultStates]
+        bestScore = max(scores)
+        bestIndices = [index for index in range(len(scores)) if scores[index] == bestScore]
+        chosenIndex = random.choice(bestIndices)
+        return legalMoves[chosenIndex]
+        """
+
+        value, move = self.miniMax(gameState, 0, 0)
+
+        return move
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
