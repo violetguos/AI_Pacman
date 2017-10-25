@@ -314,32 +314,7 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
                     value = self.expectNode(state, curr_depth, agent, value, next_pos)
 
         return value
-    """ 
-    def getValue(self, state, curr_depth, agent):
-        maxvalue = float("-inf")
-        minvalue = 0
 
-        if curr_depth == self.depth or state.isWin() or state.isLose():
-            return self.evaluationFunction(state)
-        elif agent == 0:#max
-
-            for move in state.getLegalActions(agent):
-                next_pos = state.generateSuccessor(agent, move)
-                maxvalue = max(maxvalue, self.getValue(next_pos, curr_depth, 1))
-
-            return maxvalue
-
-        else:
-
-            for move in state.getLegalActions(agent):
-                if agent == (state.getNumAgents() - 1):
-                    next_pos = state.generateSuccessor(agent, move)
-                    minvalue += self.getValue(next_pos, curr_depth +1 , 0)
-                else:
-                    next_pos = state.generateSuccessor(agent, move)
-                    minvalue +=self.getValue(next_pos, curr_depth, agent + 1)
-            return float(minvalue/(agent))
-    """
     def getAction(self, gameState):
         """
           Returns the expectimax action using self.depth and self.evaluationFunction
