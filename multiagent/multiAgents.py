@@ -18,6 +18,27 @@ import random, util
 
 from game import Agent
 
+class Actions:
+    """
+    A collection of static methods for manipulating move actions.
+    """
+    # Directions
+    _directions = {Directions.NORTH: (0, 1),
+                   Directions.SOUTH: (0, -1),
+                   Directions.EAST:  (1, 0),
+                   Directions.WEST:  (-1, 0),
+                   Directions.STOP:  (0, 0)}
+
+    _directionsAsList = _directions.items()
+
+    def directionToVector(direction, speed = 1.0):
+        #print "Actions in vector, ", direction
+        dx, dy =  Actions._directions[direction]
+        return (dx * speed, dy * speed)
+    directionToVector = staticmethod(directionToVector)
+
+
+
 class ReflexAgent(Agent):
     """
       A reflex agent chooses an action at each choice point by examining
@@ -50,24 +71,74 @@ class ReflexAgent(Agent):
         "Add more of your code here if you want to"
 
         return legalMoves[chosenIndex]
-    def countFood(self, food, newPos):
+    def countFood(self, food):
         cnt = 0
-        pi = newPos[0]
-        pj = newPos[1]
-        if pi<len(food[0]) and pj < len(food[1]):
-            if food[pi + 1][pj+1]:
-                cnt+=1
-        if pi >=1 and pj >=1:
-            if food[pi-1][pj-1]:
-                cnt+=1
-        if pi<len(food[0])-1 and pj >=1:
-            if food[pi+1][pj-1]:
-                cnt +=1
-        if pi >= 1 and pj < len(food[0]) - 1:
-            if food[pi- 1][pj+1]:
-                cnt+=1
+        for i in food:
+            for j in i:
+                if j:
+                    cnt+=1
+
 
         return cnt
+
+
+
+    def foodbreadthFirstSearch(self, startPos, foodPos, gameState):
+        '''Search the shallowest nodes in the search tree first.
+            It can be used for two points in general
+        '''
+
+        # food pos is a list of foods
+
+        open_list = util.Queue()
+        start = (startPos, 0, [])
+        open_list.push(start)
+        visited = set()
+        visited.add(startPos)
+        # print "open_list ", open_list
+        while not open_list.isEmpty():  # hack to check if empty
+            (node, cost, path) = open_list.pop()  # node cost path
+            state = node
+            # visited.add(state)
+
+            # print "path = ", path
+            if isinstance(foodPos, tuple):  # this is point to point search
+                if node == foodPos:
+                    return path
+            if not isinstance(foodPos, tuple):  # this is to find first in a list of points
+                if foodPos[node[0]][node[1]]:
+                    return path
+
+            successor_list = []
+            for direction in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+                x = node[0]
+                y = node[1]
+                dx, dy = Actions.directionToVector(direction)
+                nextx, nexty = int(x + dx), int(y + dy)
+                allWall = gameState.getWalls()
+                if not allWall[nextx][nexty]:
+                    # successor = gameState.generatePacmanSuccessor(direction)
+                    # returns the next game state successor
+                    succ_position = (nextx, nexty)
+                    stepCost = 1
+                    succ_state = (succ_position, stepCost, direction)
+                    successor_list.append(succ_state)
+                    # print "successors: ", successor.getPacmanPosition()
+
+            for succ_node, succ_cost, succ_action in successor_list:
+                if not succ_node in visited:  # not visited yet
+                    # print "succ node, ", succ_node
+                    # print "path = ", path
+                    new_cost = cost + succ_cost
+                    new_node = succ_node
+                    new_path = path + [succ_action]
+                    new_state = (new_node, new_cost, new_path)
+                    open_list.push(new_state)
+                    visited.add(succ_node)
+        return []  # no solution case
+
+
+
     def evaluationFunction(self, currentGameState, action):
         """
         Design a better evaluation function here.
@@ -89,11 +160,38 @@ class ReflexAgent(Agent):
         newFood = successorGameState.getFood()
         newGhostStates = successorGameState.getGhostStates()
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
-        numFood = self.countFood(newFood, newPos)
-        #print "NEW FOOD",newFood
-        #print "type",newFood[0][0]
+
         "*** YOUR CODE HERE ***"
-        return (successorGameState.getScore() + numFood)
+        newScore = successorGameState.getScore()
+
+        #active ghosts
+        active_ghosts = []
+        for ghost in newGhostStates:
+            if ghost.scaredTimer == 0:
+                active_ghosts.append(ghost.getPosition())
+        active_ghosts_dist = []
+        if len(active_ghosts)>0:
+            for i in range(len(active_ghosts)):
+                active_ghosts_dist.append(util.manhattanDistance(active_ghosts[i], newPos))
+            ghost_score = min(active_ghosts_dist)
+        else:
+            ghost_score = 0
+
+        dist_food = []
+        food_list = newFood.asList()
+        food_num = successorGameState.getNumFood()
+        if len(food_list) > 0:
+            for i in range(len(food_list)):
+                dist_food.append(util.manhattanDistance(food_list[i], newPos))
+            food_score = min(dist_food)
+        else:
+            food_score = 0
+        food_score +=(10*food_num)
+
+
+
+
+        return (newScore + ghost_score - food_score)
 
 def scoreEvaluationFunction(currentGameState):
     """
@@ -211,55 +309,27 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
                 next_pos = state.generateSuccessor(agent, move)
                 if agent == 0:
                     value = max(value, self.getValue(next_pos, curr_depth, 1, alpha, beta))
+                    alpha = max(alpha, value)
+                    if value > beta:
+                        return value
+
                 elif agent != 0:  # min
                     if agent == (state.getNumAgents() - 1):
                         value = min(value, self.getValue(next_pos, curr_depth + 1, 0, alpha, beta))
-                        if value >= beta:
+                        beta = min(beta, value)
+
+                        if value < alpha:
                             return value
-                        alpha = max(alpha, value)
+
                     else:
                         value = min(value, self.getValue(next_pos, curr_depth, agent + 1, alpha, beta))
-                        if value <=alpha:
-                            return value
                         beta = min(beta, value)
+
+                        if value <alpha:
+                            return value
         return value
 
-    def max_agent(self, state,  curr_depth, agent, alpha, beta):
-        maxvalue = float("-inf")
-        for move in state.getLegalActions(agent):
-            next_pos = state.generateSuccessor(agent, move)
-            maxvalue = max(maxvalue, self.getValue(next_pos, curr_depth, 1, alpha, beta))
-            if maxvalue > alpha:
-                alpha = maxvalue
-            if alpha > beta:
-                #print "prune alpha bete", alpha, beta
-                return alpha
-            #print "no prune alpha bete", alpha, beta
 
-
-
-        return maxvalue
-
-    def min_agent(self, state, curr_depth, agent, alpha, beta):
-        minvalue = float("inf")
-        for move in state.getLegalActions(agent):
-            if agent == (state.getNumAgents() - 1):
-                next_pos = state.generateSuccessor(agent, move)
-                minvalue = min(minvalue, self.getValue(next_pos, curr_depth + 1, 0, alpha, beta))
-
-            else:
-                next_pos = state.generateSuccessor(agent, move)
-                minvalue = min(minvalue, self.getValue(next_pos, curr_depth, agent + 1, alpha, beta))
-            if minvalue < beta:
-                beta = minvalue
-
-            if beta < alpha:
-                #print "prune alpha bete", alpha, beta
-
-                return beta
-            #print "no prune alpha bete", alpha, beta
-
-        return minvalue
 
     def getAction(self, gameState):
         """
