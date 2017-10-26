@@ -341,7 +341,58 @@ def betterEvaluationFunction(currentGameState):
       DESCRIPTION: <write something here so we know what you did>
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+
+    newPos = currentGameState.getPacmanPosition()
+    newFood = currentGameState.getFood()
+    newGhostStates = currentGameState.getGhostStates()
+    newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
+    newScore = currentGameState.getScore()
+    num_cap = len(currentGameState.getCapsules())
+
+
+    if currentGameState.isLose():
+        return -float("inf")
+    elif currentGameState.isWin():
+        return float("inf")
+
+    dist_food = []
+    food_list = newFood.asList()
+    food_num = currentGameState.getNumFood()
+    if len(food_list) > 0:
+        for i in range(len(food_list)):
+            dist_food.append(util.manhattanDistance(food_list[i], newPos))
+        food_score = min(dist_food)
+    else:
+        food_score = 0
+
+
+
+    ###ghost
+    active_ghosts = []
+    scared_ghosts = []
+    for ghost in newGhostStates:
+        if ghost.scaredTimer == 0:
+            active_ghosts.append(ghost.getPosition())
+        else:
+            scared_ghosts.append(ghost.getPosition())
+
+    active_ghosts_dist = []
+    scared_ghosts_dist = []
+    closet_active = 0
+    closet_scared = 0
+    if len(active_ghosts) > 0:
+        for i in range(len(active_ghosts)):
+            active_ghosts_dist.append(util.manhattanDistance(active_ghosts[i], newPos))
+        closet_active = min(active_ghosts_dist)
+    else:
+        closet_active = float("inf")
+    if len(scared_ghosts) >0:
+        for i in range(len(scared_ghosts)):
+            scared_ghosts_dist.append(util.manhattanDistance(scared_ghosts[i], newPos))
+        closet_scared = min(scared_ghosts_dist)
+
+    return (newScore- food_score - (1.0/closet_active) - closet_scared - 10*num_cap -2*food_num)
 
 # Abbreviation
 better = betterEvaluationFunction
