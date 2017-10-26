@@ -243,24 +243,25 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
                 next_pos = state.generateSuccessor(agent, move)
                 if agent == 0:
                     value = max(value, self.getValue(next_pos, curr_depth, 1, alpha, beta))
-                    alpha = max(alpha, value)
-                    if value > beta:
-                        return value
 
+                    if value >= beta:
+                        return value
+                    alpha = max(alpha, value)
                 elif agent != 0:  # min
                     if agent == (state.getNumAgents() - 1):
                         value = min(value, self.getValue(next_pos, curr_depth + 1, 0, alpha, beta))
-                        beta = min(beta, value)
 
-                        if value < alpha:
+                        if value <= alpha:
                             return value
+                        beta = min(beta, value)
 
                     else:
                         value = min(value, self.getValue(next_pos, curr_depth, agent + 1, alpha, beta))
-                        beta = min(beta, value)
 
-                        if value <alpha:
+
+                        if value <=alpha:
                             return value
+                        beta = min(beta, value)
         return value
 
 
@@ -280,6 +281,11 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
             if next_val > maxValue:
                 maxValue = next_val
                 maxAction =move
+            if maxValue >= beta:
+                return maxValue
+            alpha = max(alpha, maxValue)
+
+
         return maxAction
 
 
@@ -352,7 +358,7 @@ def betterEvaluationFunction(currentGameState):
 
 
     if currentGameState.isLose():
-        return -float("inf")
+        return float("-inf")
     elif currentGameState.isWin():
         return float("inf")
 
@@ -379,7 +385,8 @@ def betterEvaluationFunction(currentGameState):
 
     active_ghosts_dist = []
     scared_ghosts_dist = []
-    closet_active = 0
+    closet_active = float("inf")
+
     closet_scared = 0
     if len(active_ghosts) > 0:
         for i in range(len(active_ghosts)):
@@ -387,12 +394,13 @@ def betterEvaluationFunction(currentGameState):
         closet_active = min(active_ghosts_dist)
     else:
         closet_active = float("inf")
+
     if len(scared_ghosts) >0:
         for i in range(len(scared_ghosts)):
             scared_ghosts_dist.append(util.manhattanDistance(scared_ghosts[i], newPos))
         closet_scared = min(scared_ghosts_dist)
 
-    return (newScore- food_score - (1.0/closet_active) - closet_scared - 10*num_cap -2*food_num)
+    return (2*newScore- 1.5*food_score - 2*(1.0/closet_active) - 2*closet_scared - 20*num_cap -5*food_num)
 
 # Abbreviation
 better = betterEvaluationFunction
