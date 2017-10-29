@@ -218,17 +218,6 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
     """
       Your minimax agent with alpha-beta pruning (question 3)
     """
-    #
-    # def getValue(self, state, curr_depth, agent, alpha, beta):
-    #
-    #     if curr_depth == self.depth or state.isWin() or state.isLose():
-    #         return self.evaluationFunction(state)
-    #     elif agent == 0:
-    #         value = self.max_agent(state, curr_depth, agent, alpha, beta)
-    #         return value
-    #     else:
-    #         value = self.min_agent(state, curr_depth, agent, alpha, beta)
-    #         return value
 
     def getValue(self, state, curr_depth, agent, alpha, beta):
         if agent == 0:
@@ -295,13 +284,15 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
       Your expectimax agent (question 4)
     """
     def expectNode(self, state, curr_depth, agent, value, next_pos):
+        cnt = 0
         if agent == (state.getNumAgents() - 1):
-            value += self.getValue(next_pos, curr_depth + 1, 0)
+            value +=(self.getValue(next_pos, curr_depth + 1, 0))
+            cnt +=1
 
         else:
-            value += self.getValue(next_pos, curr_depth, agent + 1)
-
-        return value
+            value +=(self.getValue(next_pos, curr_depth, agent + 1))
+            cnt += 1
+        return  value/cnt
 
     def getValue(self, state, curr_depth, agent):
         if agent ==0:
@@ -365,15 +356,23 @@ def betterEvaluationFunction(currentGameState):
     dist_food = []
     food_list = newFood.asList()
     food_num = currentGameState.getNumFood()
+
+
     if len(food_list) > 0:
         for i in range(len(food_list)):
             dist_food.append(util.manhattanDistance(food_list[i], newPos))
+        sorted(dist_food)
+
+
         food_score = min(dist_food)
     else:
         food_score = 0
 
-
-
+    #if len(food_list) == 1:
+    #    food_score = -1000
+    #if len(dist_food) > 1:
+    #    if dist_food[0] == dist_food[1]:
+    #        food_score =1000
     ###ghost
     active_ghosts = []
     scared_ghosts = []
@@ -400,8 +399,7 @@ def betterEvaluationFunction(currentGameState):
             scared_ghosts_dist.append(util.manhattanDistance(scared_ghosts[i], newPos))
         closet_scared = min(scared_ghosts_dist)
 
-    return (2*newScore- 1.5*food_score - 2*(1.0/closet_active) - 2*closet_scared - 20*num_cap -5*food_num)
-
+    return (- 1.5*food_score - 2*(1.0/closet_active) - 2*closet_scared + 2*newScore- 20*num_cap -5*food_num)
 # Abbreviation
 better = betterEvaluationFunction
 
