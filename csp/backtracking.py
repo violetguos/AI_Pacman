@@ -174,8 +174,27 @@ def FC(unAssignedVars, csp, allSolutions, trace):
     #you must not change the function parameters.
     #Implementing handling of the trace parameter is optional
     #but it can be useful for debugging
-
-    util.raiseNotDefined()
+    if unAssignedVars.empty():
+        for var in csp.variables:
+            print var.name
+            if allSolutions:
+                return
+            else: exit(0)
+        var = unAssignedVars.extract()
+        for val in var.curDomain():
+            var.setValue(val)
+            noDWO = True
+            for constraint in csp.constraintsOf(var):
+                if constraint.numUnassigned() == 1:
+                    if FCCheck(csp, var, val) == "DWO":
+                        noDWO = False
+                        break
+            if noDWO:
+                FC(unAssignedVars)
+            var.unAssign()
+        var.setValue(None)
+        unAssignedVars.insert(var)
+        return
 
 def GacEnforce(constraints, csp, reasonVar, reasonVal):
     '''Establish GAC on constraints by pruning values

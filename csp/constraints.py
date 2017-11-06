@@ -29,7 +29,7 @@ class TableConstraint(Constraint):
                                 [3, 2, 4, 1], [3, 4, 1, 2], [3, 4, 2, 1],
                                 [4, 1, 2, 3], [4, 1, 3, 2], [4, 2, 1, 3],
                                 [4, 2, 3, 1], [4, 3, 1, 2], [4, 3, 2, 1]])
-          as these are the only assignments to A,B,C respectively that
+          as tchese are the only assignments to A,B,C respectively that
           satisfy A+B=C.
         '''
 
@@ -121,7 +121,10 @@ class QueensTableConstraint(TableConstraint):
     #the existing function signatures.
     def __init__(self, name, qi, qj, i, j):
         self._name = "Queen_" + name
-        util.raiseNotDefined()
+        scope = [qi, qj]
+        satAssignments = [i, j]
+
+        TableConstraint.__init__(self, name, scope, satAssignments)
 
 class NeqConstraint(Constraint):
     '''Neq constraint between two variables'''
