@@ -1,5 +1,6 @@
 from csp import Constraint, Variable
 import util
+import itertools
 
 class TableConstraint(Constraint):
     '''General type of constraint that can be use to implement any type of
@@ -103,6 +104,7 @@ class QueensConstraint(Constraint):
                 return True
         return False
 
+
 class QueensTableConstraint(TableConstraint):
 
     '''Queens constraint between queen in row i and row j, but
@@ -121,9 +123,38 @@ class QueensTableConstraint(TableConstraint):
     #the existing function signatures.
     def __init__(self, name, qi, qj, i, j):
         self._name = "Queen_" + name
-        scope = [qi, qj]
-        satAssignments = [i, j]
+        #qi.curDomain(): one list of ints, that are posistions
+        list_domain = qi.domain()
 
+        all_possible = itertools.permutations(list_domain)
+       # print "qi.domainSize()", qi.domainSize()
+        sat_size = 1
+        for i in range(1, qi.domainSize()+1):
+            sat_size = sat_size * i
+        sat_hash =[1] * (sat_size)
+        #print "sat_hash", len(sat_hash)
+        satAssignments = []
+
+        all_possible = list(all_possible)
+        #print all_possible
+        #print "len(all_possible)", len(all_possible)
+        for pos in (range(len(all_possible))):
+            #print "pos", pos
+
+            for ii in range(0, len(all_possible[pos]) -1):
+                pos_t = all_possible[pos]
+                print pos_t
+                if pos_t[ii] == pos_t[ii+1] or\
+                        (pos_t[ii]- pos_t[ii+1] == 1) or \
+                        (pos_t[ii + 1] - pos_t[ii] == 1):
+                    print " pos_t[ii] == pos_t[ii+1]", pos_t[ii], pos_t[ii + 1]
+                    sat_hash[pos] = 0
+        print sat_hash
+        for hi in sat_hash:
+            if hi == 1:
+                satAssignments.append(list(all_possible[hi]))
+        #print satAssignments
+        scope = [qi, qj]
         TableConstraint.__init__(self, name, scope, satAssignments)
 
 class NeqConstraint(Constraint):

@@ -154,6 +154,7 @@ def FCCheck(cnstr, reasonVar, reasonVal):
         return "DWO"
     return "OK"
 
+
 def FC(unAssignedVars, csp, allSolutions, trace):
     '''Forward checking search.
        unAssignedVars is the current set of
@@ -176,25 +177,25 @@ def FC(unAssignedVars, csp, allSolutions, trace):
     #but it can be useful for debugging
     if unAssignedVars.empty():
         for var in csp.variables:
-            print var.name
+            print var.name()
             if allSolutions:
                 return
             else: exit(0)
-        var = unAssignedVars.extract()
-        for val in var.curDomain():
-            var.setValue(val)
-            noDWO = True
-            for constraint in csp.constraintsOf(var):
-                if constraint.numUnassigned() == 1:
-                    if FCCheck(csp, var, val) == "DWO":
-                        noDWO = False
-                        break
-            if noDWO:
-                FC(unAssignedVars)
-            var.unAssign()
-        var.setValue(None)
-        unAssignedVars.insert(var)
-        return
+    nxtvar = unAssignedVars.extract()
+    for val in nxtvar.curDomain():
+        nxtvar.setValue(val)
+        noDWO = True
+        for constraint in csp.constraintsOf(nxtvar):
+            if constraint.numUnassigned() == 1:
+                if FCCheck(constraint, nxtvar, val) == "DWO":
+                    noDWO = False
+                    break
+        if noDWO:
+            FC(unAssignedVars, csp, allSolutions, trace)
+    nxtvar.unAssign()
+    nxtvar.setValue(None)
+    unAssignedVars.insert(nxtvar)
+    return
 
 def GacEnforce(constraints, csp, reasonVar, reasonVal):
     '''Establish GAC on constraints by pruning values
