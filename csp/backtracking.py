@@ -175,27 +175,39 @@ def FC(unAssignedVars, csp, allSolutions, trace):
     #you must not change the function parameters.
     #Implementing handling of the trace parameter is optional
     #but it can be useful for debugging
+    trace = True
     if unAssignedVars.empty():
-        for var in csp.variables:
-            print var.name()
-            if allSolutions:
-                return
-            else: exit(0)
+        if trace: print "{} Solution Found".format(csp.name())
+        soln = []
+        for var in csp.variables():
+            soln.append((var, var.getValue()))
+            #if allSolutions:
+        return [soln]
+            #else:
+                #exit
+    bt_search.nodesExplored += 1
+    solns = []
     nxtvar = unAssignedVars.extract()
-    for val in nxtvar.curDomain():
+    if trace: print "==>Trying {}".format(nxtvar.name())
+    for val in nxtvar.curDomain(): #curDomain for FC!!
+        if trace: print "==> {} = {}".format(nxtvar.name(), val)
         nxtvar.setValue(val)
         noDWO = True
         for constraint in csp.constraintsOf(nxtvar):
             if constraint.numUnassigned() == 1:
                 if FCCheck(constraint, nxtvar, val) == "DWO":
                     noDWO = False
+                    if trace: print "<==falsified constraint\n"
                     break
         if noDWO:
-            FC(unAssignedVars, csp, allSolutions, trace)
+            new_solns = FC(unAssignedVars, csp, allSolutions, trace)
+            if new_solns:
+                solns.extend(new_solns)
+            if len(solns)> 0 and not allSolutions:
+                break
     nxtvar.unAssign()
-    nxtvar.setValue(None)
     unAssignedVars.insert(nxtvar)
-    return
+    return solns
 
 def GacEnforce(constraints, csp, reasonVar, reasonVal):
     '''Establish GAC on constraints by pruning values
