@@ -145,14 +145,28 @@ def FCCheck(cnstr, reasonVar, reasonVal):
     if cnstr.numUnassigned() != 1:
         print "Error FCCheck called on constraint {} with {} neq 1 unassigned vars".format(cnstr.name(), cnstr.numUnassignedVars)
     var = cnstr.unAssignedVars()[0]
+    print "afc CHECK, VAR", var
     for val in var.curDomain():
+        print "---------------"
+        print "fcc var, var curr domain", var, var.curDomain()
         var.setValue(val)
+        print "FC check var",  var,  "val", val
         if not cnstr.check():
+            print " before prune fcc var, var curr domain", var, var.curDomain()
+
             var.pruneValue(val, reasonVar, reasonVal)
-        var.unAssign()  #NOTE WE MUST UNDO TRIAL ASSIGNMENT
+
+            print " after prune fcc var, var curr domain", var, var.curDomain()
+
+        #var.unAssign()  # NOTE WE MUST UNDO TRIAL ASSIGNMENT
+    var.unAssign()  # NOTE WE MUST UNDO TRIAL ASSIGNMENT
+    var.restoreVal(val)
+
     if var.curDomainSize() == 0:
+        print "DWO var", var
         return "DWO"
-    return "OK"
+    else:
+        return "OK"
 
 
 def FC(unAssignedVars, csp, allSolutions, trace):
@@ -194,6 +208,7 @@ def FC(unAssignedVars, csp, allSolutions, trace):
         nxtvar.setValue(val)
         noDWO = True
         for constraint in csp.constraintsOf(nxtvar):
+            print "fc constr,", constraint
             if constraint.numUnassigned() == 1:
                 if FCCheck(constraint, nxtvar, val) == "DWO":
                     noDWO = False
@@ -201,11 +216,15 @@ def FC(unAssignedVars, csp, allSolutions, trace):
                     break
         if noDWO:
             new_solns = FC(unAssignedVars, csp, allSolutions, trace)
+
             if new_solns:
                 solns.extend(new_solns)
             if len(solns)> 0 and not allSolutions:
                 break
-    nxtvar.unAssign()
+        nxtvar.restoreVal(val)
+
+    nxtvar.unAssign() #same as set Vlue none
+    #nxtvar.setValue(None)
     unAssignedVars.insert(nxtvar)
     return solns
 
@@ -217,10 +236,13 @@ def GacEnforce(constraints, csp, reasonVar, reasonVal):
     #your implementation for Question 3 goes in this function body
     #you must not change the function parameters
     #ensure that you return one of "OK" or "DWO"
+    constrs = util.Queue()
+    constrs.list = constraints
 
-    #while not len(constraints) == 0:
-    for i in range(len(constraints)):
-        constraint = constraints[i]
+
+    while not constrs.isEmpty():
+    #for i in range(len(constraints)):
+        constraint = constrs.pop()
         for var in constraint.scope():
             for val in var.curDomain():
                 if not constraint.hasSupport(var, val):
@@ -228,9 +250,10 @@ def GacEnforce(constraints, csp, reasonVar, reasonVal):
                     if var.curDomainSize() == 0:
                         return "DWO"
                     for recheck in csp.constraintsOf(var):
-                        if recheck!=constraint and not recheck in constraints:
-                            constraints.append(recheck)
+                        if recheck!=constraint and not recheck in constrs.list:
+                            constrs.push(recheck)
     return "OK"
+
 def GAC(unAssignedVars, csp, allSolutions, trace):
     '''GAC search.
        unAssignedVars is the current set of
@@ -259,6 +282,8 @@ def GAC(unAssignedVars, csp, allSolutions, trace):
         #if allSolutions:
         return [soln]
     var = unAssignedVars.extract()
+    bt_search.nodesExplored += 1
+
     solns = []
     for val in var.curDomain():
         var.setValue(val)
@@ -266,7 +291,11 @@ def GAC(unAssignedVars, csp, allSolutions, trace):
         if GacEnforce(csp.constraintsOf(var), csp, var, val) == "DWO":
             noDWO = False
         if noDWO:
-            solns = GAC(unAssignedVars, csp, allSolutions, trace)
+            new_solns = GAC(unAssignedVars, csp, allSolutions, trace)
+            if new_solns:
+                solns.extend(new_solns)
+            if len(solns)> 0 and not allSolutions:
+                break
         var.restoreVal(val)
     var.setValue(None)
     unAssignedVars.insert(var)
