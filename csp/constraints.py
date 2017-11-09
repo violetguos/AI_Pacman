@@ -134,7 +134,7 @@ class QueensTableConstraint(TableConstraint):
         sat_hash =[1] * (sat_size)
         #print "sat_hash", len(sat_hash)
         satAssignments = []
-
+        #TODO: LINE 88 of constaint
         all_possible = list(all_possible)
         #print all_possible
         #print "len(all_possible)", len(all_possible)
@@ -299,6 +299,7 @@ class NValuesConstraint(Constraint):
 
     def check(self):
         util.raiseNotDefined()
+        #Count all the values
 
     def hasSupport(self, var, val):
         '''check if var=val has an extension to an assignment of the
@@ -309,3 +310,4 @@ class NValuesConstraint(Constraint):
                  there are other ways as well)
         '''
         util.raiseNotDefined()
+        #TODO:

@@ -158,9 +158,8 @@ def FCCheck(cnstr, reasonVar, reasonVal):
 
             print " after prune fcc var, var curr domain", var, var.curDomain()
 
-        #var.unAssign()  # NOTE WE MUST UNDO TRIAL ASSIGNMENT
-    var.unAssign()  # NOTE WE MUST UNDO TRIAL ASSIGNMENT
-    var.restoreVal(val)
+        var.unAssign()  # NOTE WE MUST UNDO TRIAL ASSIGNMENT
+    #var.restoreVal(val)
 
     if var.curDomainSize() == 0:
         print "DWO var", var
@@ -216,16 +215,18 @@ def FC(unAssignedVars, csp, allSolutions, trace):
                     break
         if noDWO:
             new_solns = FC(unAssignedVars, csp, allSolutions, trace)
-
             if new_solns:
                 solns.extend(new_solns)
+            Variable.restoreValues(nxtvar, val)
+
             if len(solns)> 0 and not allSolutions:
                 break
-        nxtvar.restoreVal(val)
+        Variable.restoreValues(nxtvar, val)
 
     nxtvar.unAssign() #same as set Vlue none
     #nxtvar.setValue(None)
     unAssignedVars.insert(nxtvar)
+
     return solns
 
 def GacEnforce(constraints, csp, reasonVar, reasonVal):
@@ -256,6 +257,7 @@ def GacEnforce(constraints, csp, reasonVar, reasonVal):
 
 def GAC(unAssignedVars, csp, allSolutions, trace):
     '''GAC search.
+    #TODO: q4
        unAssignedVars is the current set of
        unassigned variables.  csp is the csp
        problem, allSolutions is True if you want all solutionsl trace
@@ -274,6 +276,7 @@ def GAC(unAssignedVars, csp, allSolutions, trace):
     #You must not change the function parameters.
     #implementing support for "trace" is optional, but it might
     #help you in debugging
+    # TODO: q4 in CSP pseudo code
 
     if unAssignedVars.empty():
         soln = []
@@ -294,9 +297,11 @@ def GAC(unAssignedVars, csp, allSolutions, trace):
             new_solns = GAC(unAssignedVars, csp, allSolutions, trace)
             if new_solns:
                 solns.extend(new_solns)
+            Variable.restoreValues(var, val)
+
             if len(solns)> 0 and not allSolutions:
                 break
-        var.restoreVal(val)
+        Variable.restoreValues(var, val)
     var.setValue(None)
     unAssignedVars.insert(var)
     return solns
