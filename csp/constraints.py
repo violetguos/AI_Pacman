@@ -123,38 +123,29 @@ class QueensTableConstraint(TableConstraint):
     #the existing function signatures.
     def __init__(self, name, qi, qj, i, j):
         self._name = "Queen_" + name
-        #qi.curDomain(): one list of ints, that are posistions
-        list_domain = qi.domain()
-
-        all_possible = itertools.permutations(list_domain)
-       # print "qi.domainSize()", qi.domainSize()
-        sat_size = 1
-        for i in range(1, qi.domainSize()+1):
-            sat_size = sat_size * i
-        sat_hash =[1] * (sat_size)
-        #print "sat_hash", len(sat_hash)
         satAssignments = []
-        #TODO: LINE 88 of constaint
-        all_possible = list(all_possible)
-        #print all_possible
-        #print "len(all_possible)", len(all_possible)
-        for pos in (range(len(all_possible))):
-            #print "pos", pos
+        #qi.curDomain(): one list of ints, that are posistions
+        #list_domain = qi.domain() [1234]
+        n = len(qi.domain()) #number of queens
 
-            for ii in range(0, len(all_possible[pos]) -1):
-                pos_t = all_possible[pos]
-                print pos_t
-                if pos_t[ii] == pos_t[ii+1] or\
-                        (pos_t[ii]- pos_t[ii+1] == 1) or \
-                        (pos_t[ii + 1] - pos_t[ii] == 1):
-                    print " pos_t[ii] == pos_t[ii+1]", pos_t[ii], pos_t[ii + 1]
-                    sat_hash[pos] = 0
-        print sat_hash
-        for hi in sat_hash:
-            if hi == 1:
-                satAssignments.append(list(all_possible[hi]))
+        #print "qi" , qi.
+        #print list_domain
+        if i != j:
+
+            for itr in range(0,n): #queen number
+                sol = []
+                for itr2 in range(0,n): #row number
+                    diag = abs(itr2 - i) == abs(itr2 - j) #vali: queen number, i, row number
+                    if not diag and itr != itr2:
+                        sol.append(itr2)
+                    if itr == i and itr == j:
+                        sol.append(itr)
+                satAssignments.append(sol)
+
+
         #print satAssignments
         scope = [qi, qj]
+
         TableConstraint.__init__(self, name, scope, satAssignments)
 
 class NeqConstraint(Constraint):
