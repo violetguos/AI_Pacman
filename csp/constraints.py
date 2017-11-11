@@ -122,31 +122,38 @@ class QueensTableConstraint(TableConstraint):
     #inside of this class body. You must not change
     #the existing function signatures.
     def __init__(self, name, qi, qj, i, j):
-        self._name = "Queen_" + name
+        #self._name = "Queen_" + name
         satAssignments = []
         #qi.curDomain(): one list of ints, that are posistions
-        #list_domain = qi.domain() [1234]
+        list_domain = qi.domain() #[1234]
         n = len(qi.domain()) #number of queens
 
-        #print "qi" , qi.
-        #print list_domain
-        if i != j:
+        all_comb = list(itertools.permutations(list_domain))
+        #print "comb", all_comb
 
-            for itr in range(0,n): #queen number
-                sol = []
-                for itr2 in range(0,n): #row number
-                    diag = abs(itr2 - i) == abs(itr2 - j) #vali: queen number, i, row number
-                    if not diag and itr != itr2:
-                        sol.append(itr2)
-                    if itr == i and itr == j:
-                        sol.append(itr)
-                satAssignments.append(sol)
+        solns= []
+        for i in range(len(all_comb)):
+            curr_tuple = all_comb[i]
+            cnt = 0
+            #print "curr_tuple", curr_tuple
+            for j in range(0,n):
+                for k in range(0, n):
+                    #print "curr_tuple[j]", curr_tuple[j], " j ", j
+                    #print "curr_tuple[k]", curr_tuple[k], " k ", k
+                    diag = abs(curr_tuple[j] - curr_tuple[k]) == abs(j - k)
+                    if diag and j !=k:
+                        cnt +=1
+            if cnt == 0:
+                solns.append(list(curr_tuple))
 
+        print solns
 
         #print satAssignments
+        #self.i = i
+        #self.j = j
         scope = [qi, qj]
 
-        TableConstraint.__init__(self, name, scope, satAssignments)
+        TableConstraint.__init__(self, name, scope, solns)
 
 class NeqConstraint(Constraint):
     '''Neq constraint between two variables'''
