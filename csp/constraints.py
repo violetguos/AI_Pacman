@@ -146,7 +146,7 @@ class QueensTableConstraint(TableConstraint):
             if cnt == 0:
                 solns.append(list(curr_tuple))
 
-        print solns
+        #print solns
 
         #print satAssignments
         #self.i = i

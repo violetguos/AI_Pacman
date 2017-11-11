@@ -130,15 +130,17 @@ def sudokuCSP(initial_sudoku_board, model='neq'):
         if model == 'neq':
             constraint_list.extend(post_all_pairs(row))
         elif model == 'alldiff':
-            c= Constraint.__init__("soduku",constraint_list.extend(post_all_pairs(row)) )
+            constraint_list.extend(post_all_diffs(row))
+            #c1 = AllDiffConstraint("alldiff", row)
     for colj in range(len(var_array[0])):
         scope = map(lambda row: row[colj], var_array)
         if model == 'neq':
             constraint_list.extend(post_all_pairs(scope))
         elif model == 'alldiff':
             #util.raiseNotDefined()
-            AllDiffConstraint(c)
-
+            #print "scope, ", scope
+            constraint_list.extend(post_all_diffs(scope))
+            #c2 = AllDiffConstraint("alldiff", list(scope))
     for i in [0, 3, 6]:
         for j in [0, 3, 6]:
             #initial upper left hand index of subsquare
@@ -150,9 +152,11 @@ def sudokuCSP(initial_sudoku_board, model='neq'):
                 constraint_list.extend(post_all_pairs(scope))
             elif model == 'alldiff':
                 #util.raiseNotDefined() #ALLFDIFFF functions
-                AllDiffConstraint(c)
+                constraint_list.extend(post_all_diffs(scope))
 
     vars = [var for row in var_array for var in row]
+    #print vars[0].scope()
+
     return CSP("Sudoku", vars, constraint_list)
 
 def post_all_pairs(var_list):
@@ -163,6 +167,20 @@ def post_all_pairs(var_list):
         for j in range(i+1,len(var_list)):
             c = NeqConstraint("({},{})".format(var_list[i].name(), var_list[j].name()),[var_list[i], var_list[j]])
             constraints.append(c)
+    return constraints
+
+
+
+def post_all_diffs(var_list):
+    '''create a all diff constraint between all pairs of variables in var_list
+       return list of constructed constraint objects'''
+    constraints = []
+    names = []
+
+    for i in range(len(var_list)):
+        names.append(var_list[i].name())
+    c = AllDiffConstraint("({})".format(names),var_list)
+    constraints.append(c)
     return constraints
 
 def solve_sudoku(initialBoard, model, algo, allsolns,
