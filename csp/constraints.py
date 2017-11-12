@@ -149,8 +149,8 @@ class QueensTableConstraint(TableConstraint):
         #print solns
 
         #print satAssignments
-        #self.i = i
-        #self.j = j
+        self.i = i
+        self.j = j
         scope = [qi, qj]
 
         TableConstraint.__init__(self, name, scope, solns)
@@ -306,10 +306,7 @@ class NValuesConstraint(Constraint):
             cnt = 0
             if var == self._required:
                 cnt +=1
-        if cnt > self._lb and cnt < self._ub:
-            return True
-        else:
-            return False
+        return (cnt > self._lb and cnt < self._ub)
 
 
 
@@ -325,24 +322,18 @@ class NValuesConstraint(Constraint):
         #TODO:
         if var not in self.scope():
             return True
+
+        def findIntVals(l):
+            vals = [val for (var, val) in l]
+            cnt = 0
+            for i in range(len(vals)):
+                if vals[i] == self._required:
+                    cnt +=1
+            return (cnt <= self._ub and cnt >= self._lb)
         varsToAssign = self.scope()
         varsToAssign.remove(var)
-        x = self.findvalsBound(varsToAssign, [(var, val)])
+        x = findvals(varsToAssign, [(var, val)], findIntVals, findIntVals)
         return x
-
-    def findvalsBound(self, remaining_vars, assignment):
-        if len(remaining_vars) == 0:
-            return self.check()
-        var = min(remaining_vars, key=lambda v: v.curDomainSize())
-        remaining_vars.remove(var)
-        for val in var.curDomain():
-            assignment.append((var, val))
-            if self.check():
-                if self.findvalsBound(remaining_vars, assignment):
-                    return True
-            assignment.pop()   #(var,val) didn't work since we didn't do the return
-        remaining_vars.append(var)
-        return False
 
 
 
