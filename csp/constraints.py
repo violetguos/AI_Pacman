@@ -122,36 +122,20 @@ class QueensTableConstraint(TableConstraint):
     #inside of this class body. You must not change
     #the existing function signatures.
     def __init__(self, name, qi, qj, i, j):
-        #self._name = "Queen_" + name
-        satAssignments = []
-        #qi.curDomain(): one list of ints, that are posistions
-        list_domain = qi.domain() #[1234]
-        n = len(qi.domain()) #number of queens
+        solns = []
 
-        all_comb = list(itertools.permutations(list_domain))
-        #print "comb", all_comb
-
-        solns= []
-        for i in range(len(all_comb)):
-            curr_tuple = all_comb[i]
-            cnt = 0
-            #print "curr_tuple", curr_tuple
-            for j in range(0,n):
-                for k in range(0, n):
-                    #print "curr_tuple[j]", curr_tuple[j], " j ", j
-                    #print "curr_tuple[k]", curr_tuple[k], " k ", k
-                    diag = abs(curr_tuple[j] - curr_tuple[k]) == abs(j - k)
-                    if diag and j !=k:
-                        cnt +=1
-            if cnt == 0:
-                solns.append(list(curr_tuple))
-
-        #print solns
-
-        #print satAssignments
-        self.i = i
-        self.j = j
+        for ii in qi.domain():
+            for jj in qj.domain():
+                #print "ii," , ii
+                #print "jj", jj
+                if i != j and ii != jj and abs(ii - jj) != abs(i - j):
+                        solns.append(tuple((ii, jj)))
+        print "========"
+        print i, j
+        print solns
         scope = [qi, qj]
+
+
 
         TableConstraint.__init__(self, name, scope, solns)
 
