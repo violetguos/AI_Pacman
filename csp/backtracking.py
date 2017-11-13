@@ -145,24 +145,24 @@ def FCCheck(cnstr, reasonVar, reasonVal):
     if cnstr.numUnassigned() != 1:
         print "Error FCCheck called on constraint {} with {} neq 1 unassigned vars".format(cnstr.name(), cnstr.numUnassignedVars)
     var = cnstr.unAssignedVars()[0]
-    print "afc CHECK, VAR", var
+    #print "afc CHECK, VAR", var
     for val in var.curDomain():
-        print "---------------"
-        print "fcc var, var curr domain", var, var.curDomain()
+        #print "---------------"
+        #print "fcc var, var curr domain", var, var.curDomain()
         var.setValue(val)
-        print "FC check var",  var,  "val", val
+        #print "FC check var",  var,  "val", val
         if not cnstr.check():
-            print " before prune fcc var, var curr domain", var, var.curDomain()
+            #print " before prune fcc var, var curr domain", var, var.curDomain()
 
             var.pruneValue(val, reasonVar, reasonVal)
 
-            print " after prune fcc var, var curr domain", var, var.curDomain()
+            #print " after prune fcc var, var curr domain", var, var.curDomain()
 
         var.unAssign()  # NOTE WE MUST UNDO TRIAL ASSIGNMENT
     #var.restoreVal(val)
 
     if var.curDomainSize() == 0:
-        print "DWO var", var
+        #print "DWO var", var
         return "DWO"
     else:
         return "OK"
@@ -188,7 +188,7 @@ def FC(unAssignedVars, csp, allSolutions, trace):
     #you must not change the function parameters.
     #Implementing handling of the trace parameter is optional
     #but it can be useful for debugging
-    trace = True
+    #trace = True
     if unAssignedVars.empty():
         if trace: print "{} Solution Found".format(csp.name())
         soln = []
@@ -207,7 +207,7 @@ def FC(unAssignedVars, csp, allSolutions, trace):
         nxtvar.setValue(val)
         noDWO = True
         for constraint in csp.constraintsOf(nxtvar):
-            print "fc constr,", constraint
+            #print "fc constr,", constraint
             if constraint.numUnassigned() == 1:
                 if FCCheck(constraint, nxtvar, val) == "DWO":
                     noDWO = False

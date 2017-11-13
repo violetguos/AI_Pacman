@@ -303,7 +303,7 @@ class NValuesConstraint(Constraint):
                  a similar approach is applicable here (but of course
                  there are other ways as well)
         '''
-        #TODO:
+
         if var not in self.scope():
             return True
 
