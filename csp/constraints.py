@@ -124,15 +124,15 @@ class QueensTableConstraint(TableConstraint):
     def __init__(self, name, qi, qj, i, j):
         solns = []
 
-        for ii in qi.domain():
-            for jj in qj.domain():
+        for ii in qi.curDomain():
+            for jj in qj.curDomain():
                 #print "ii," , ii
                 #print "jj", jj
-                if i != j and ii != jj and abs(ii - jj) != abs(i - j):
-                        solns.append(tuple((ii, jj)))
-        print "========"
-        print i, j
-        print solns
+                if (ii != jj) and (abs(ii - jj) != abs(i - j)):
+                    solns.append([ii, jj])
+        #print "========"
+        #print i, j
+        #print solns
         scope = [qi, qj]
 
 
@@ -313,7 +313,7 @@ class NValuesConstraint(Constraint):
             for i in range(len(vals)):
                 if vals[i] == self._required:
                     cnt +=1
-            return (cnt <= self._ub and cnt >= self._lb)
+            return (cnt <= self._ub and cnt + self.arity() - len(vals) >= self._lb)
         varsToAssign = self.scope()
         varsToAssign.remove(var)
         x = findvals(varsToAssign, [(var, val)], findIntVals, findIntVals)
