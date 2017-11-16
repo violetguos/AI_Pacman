@@ -333,6 +333,8 @@ class ParticleFilter(InferenceModule):
 
 
     def initializeUniformly(self, gameState):
+        # TODO: util.sample or util.nSample will help you obtain samples from a distribution.
+        #  If you use util.sample and your implementation is timing out, try using util.nSample.
         """
         Initializes a list of particles. Use self.numParticles for the number of
         particles. Use self.legalPositions for the legal board positions where a

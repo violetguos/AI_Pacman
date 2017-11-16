@@ -157,8 +157,7 @@ class GreedyBustersAgent(BustersAgent):
              gameState.getLivingGhosts() list.
         """
 
-        #TODO: util.sample or util.nSample will help you obtain samples from a distribution.
-        #  If you use util.sample and your implementation is timing out, try using util.nSample.
+
         pacmanPosition = gameState.getPacmanPosition()
         legal = [a for a in gameState.getLegalPacmanActions()]
         livingGhosts = gameState.getLivingGhosts()
