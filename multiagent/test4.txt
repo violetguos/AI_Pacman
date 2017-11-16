@@ -1,0 +1,33 @@
+Starting on 10-24 at 1:00:01
+
+Question q4
+===========
+
+*** PASS: test_cases/q4/0-expectimax1.test
+*** PASS: test_cases/q4/1-expectimax2.test
+*** PASS: test_cases/q4/2-one-ghost-3level.test
+*** PASS: test_cases/q4/3-one-ghost-4level.test
+*** PASS: test_cases/q4/4-two-ghosts-3level.test
+*** PASS: test_cases/q4/5-two-ghosts-4level.test
+*** PASS: test_cases/q4/6-1a-check-depth-one-ghost.test
+*** PASS: test_cases/q4/6-1b-check-depth-one-ghost.test
+*** PASS: test_cases/q4/6-1c-check-depth-one-ghost.test
+*** PASS: test_cases/q4/6-2a-check-depth-two-ghosts.test
+*** PASS: test_cases/q4/6-2b-check-depth-two-ghosts.test
+*** PASS: test_cases/q4/6-2c-check-depth-two-ghosts.test
+*** Running ExpectimaxAgent on smallClassic 1 time(s).
+*** FAIL: Terminated with a string exception.
+
+### Question q4: 0/5 ###
+
+
+Finished at 1:00:04
+
+Provisional grades
+==================
+Question q4: 0/5
+------------------
+Total: 0/5
+
+TO OBTAIN MARKS YOU MUST SUBMIT YOUR CODE USING MarkUs.
+
