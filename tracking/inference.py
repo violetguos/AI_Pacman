@@ -197,9 +197,23 @@ class ExactInference(InferenceModule):
 
         allPossible = util.Counter()
         for p in self.legalPositions:
+            p_xt_et_min1 = self.beliefs[p] #a float
+            et = noisyDistance
+
             trueDistance = util.manhattanDistance(p, pacmanPosition)
-            if emissionModel[trueDistance] > 0:
-                allPossible[p] = 1.0
+            p_et_xt = emissionModel[trueDistance]
+
+
+            if et == None:
+                pos_cell = self.getJailPosition()
+
+                allPossible[pos_cell] = 1
+            else:
+                allPossible[p]= p_xt_et_min1 * p_et_xt
+
+            # ORIGINAL CODE
+            # if emissionModel[trueDistance] > 0:
+            #    allPossible[p] = 1.0
 
         "*** END YOUR CODE HERE ***"
 
