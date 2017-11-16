@@ -298,7 +298,18 @@ class ExactInference(InferenceModule):
         #TODO:  assume that ghosts still move independently of one another, so although your code deals with one ghost
         #  at a time, adding multiple ghosts should still work correctly.
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        pacmanPosition = gameState.getPacmanPosition()
+        allPossible = util.Counter()
+        for oldP in self.legalPositions:
+            p_xt_min1 =  self.beliefs[oldP]
+            newPosDist = self.getPositionDistribution(self.setGhostPosition(gameState, oldP))
+            for newPos, prob in newPosDist.items():
+                p_xt_plus1_xt = newPosDist[newPos]
+                allPossible[newPos] += (p_xt_min1 * p_xt_plus1_xt)
+            #allPossible[p] = sum
+        allPossible.normalize()
+        self.beliefs = allPossible
+
         "*** END YOUR CODE HERE ***"
 
     def getBeliefDistribution(self):
