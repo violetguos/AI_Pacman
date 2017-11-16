@@ -175,7 +175,14 @@ class ExactInference(InferenceModule):
           captured, note 0 != None).
 
         """
+        #TODO: Write donw equations
+        #TODO: print out noisyDistance, emissionModel, and PacmanPosition
+        #TODO:, high posterior beliefs are represented by bright colors
+        #todo: Beliefs are stored as util.Counter objects (like dictionaries) in a field called self.beliefs, which you should update.
+        #todo: You should not need to store any evidence. The only thing you need to store in ExactInference is self.beliefs.
+
         noisyDistance = observation
+
         emissionModel = busters.getObservationDistribution(noisyDistance)
         pacmanPosition = gameState.getPacmanPosition()
 
@@ -274,6 +281,8 @@ class ExactInference(InferenceModule):
         particular position.
 
         """
+        #TODO:  assume that ghosts still move independently of one another, so although your code deals with one ghost
+        #  at a time, adding multiple ghosts should still work correctly.
         "*** YOUR CODE HERE ***"
         util.raiseNotDefined()
         "*** END YOUR CODE HERE ***"
