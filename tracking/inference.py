@@ -355,7 +355,7 @@ class ParticleFilter(InferenceModule):
                 sample +=self.legalPositions
                 numPar -= size_pos
             else:
-                sample= self.legalPositions
+                sample += self.legalPositions
                 numPar = 0
 
         self.particles = sample
