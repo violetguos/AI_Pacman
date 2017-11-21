@@ -524,7 +524,23 @@ class JointParticleFilter:
         weight with each position) is incorrect and may produce errors.
         """
         "*** YOUR CODE HERE ***"
+        sample = []
 
+        numPar = self.numParticles
+        cart_prod = itertools.product(self.legalPositions)
+        size_pos = len(cart_prod)
+
+        while numPar > 0:
+            if numPar > size_pos:
+                random.shuffle(cart_prod)
+                sample += cart_prod
+                numPar -= size_pos
+            else:
+                random.shuffle(cart_prod)
+                sample += cart_prod
+                numPar = 0
+
+        self.particles = sample
         "*** END YOUR CODE HERE ***"
 
 
@@ -592,8 +608,28 @@ class JointParticleFilter:
         emissionModels = [busters.getObservationDistribution(dist) for dist in noisyDistances]
 
         "*** YOUR CODE HERE ***"
+        weights = util.Counter()
 
-        "*** END YOUR CODE HERE ***"
+        for i in range(self.numGhosts):
+            if noisyDistances[i] == None:
+                cap_i_pos = self.getJailPosition(i)
+                print "cap i pos", cap_i_pos
+                self.particles  = [self.getParticleWithGhostInJail\
+                                       (p, i ) for p in self.particles]
+
+
+                #self.particles = [self.getJailPosition()] * self.numParticles
+
+        for p in self.particles:
+            dist = util.manhattanDistance(pacmanPosition, p)
+            weights[p] += emissionModels[i][dist]
+
+            if all(i == 0 for i in weights.values()):
+                self.initializeUniformly(gameState)
+            else:
+                self.particles = [util.sample(weights) for i in self.particles]
+
+    "*** END YOUR CODE HERE ***"
 
 
     def getParticleWithGhostInJail(self, particle, ghostIndex):
@@ -662,7 +698,9 @@ class JointParticleFilter:
 
     def getBeliefDistribution(self):
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #util.raiseNotDefined()
+        li = [1,2,3,4]
+        return li #self.particles
         "*** END YOUR CODE HERE ***"
 
 
