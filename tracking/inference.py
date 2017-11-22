@@ -603,10 +603,13 @@ class JointParticleFilter:
         """
         pacmanPosition = gameState.getPacmanPosition()
         noisyDistances = gameState.getNoisyGhostDistances()
+        print "noisy dist ", type(noisyDistances)
+        print "noisy dist 1 ", type(noisyDistances[0])
         if len(noisyDistances) < self.numGhosts:
             return
         emissionModels = [busters.getObservationDistribution(dist) for dist in noisyDistances]
-
+        print "emi model ", type(emissionModels)
+        print "emi model 1", type(emissionModels[0])
         "*** YOUR CODE HERE ***"
         weights = util.Counter()
 
@@ -621,16 +624,22 @@ class JointParticleFilter:
                 #self.particles = [self.getJailPosition()] * self.numParticles
         #find weights of all particles
 
-        for p in self.particles:
-            dist = util.manhattanDistance(pacmanPosition, p)
-
+        for p in self.particles: #p contains ghosts
+            prob = 1
+            for idx, model, distance in zip(range(len(p), emissionModels, noisyDistances)):
+                if distance == None:
+                    prob = 0
+                else:
+                    dist = util.manhattanDistance(pacmanPosition, p[idx])
+                    prob += model[dist]
+            weights[p] *=prob
 
 
 
         if all(i == 0 for i in weights.values()):
             self.initializeUniformly(gameState)
         else:
-                self.particles = [util.sample(weights) for i in self.particles]
+            self.particles = [util.sample(weights) for i in self.particles]
 
     "*** END YOUR CODE HERE ***"
 
@@ -702,8 +711,11 @@ class JointParticleFilter:
     def getBeliefDistribution(self):
         "*** YOUR CODE HERE ***"
         #util.raiseNotDefined()
-        li = [1,2,3,4]
-        return li #self.particles
+        allProbability = util.Counter()
+        for p in self.particles:
+            allProbability[p] += 1
+        allProbability.normalize()
+        return allProbability
         "*** END YOUR CODE HERE ***"
 
 
