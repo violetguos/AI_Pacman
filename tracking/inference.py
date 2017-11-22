@@ -610,23 +610,26 @@ class JointParticleFilter:
         "*** YOUR CODE HERE ***"
         weights = util.Counter()
 
+        #move ghosts into jail
         for i in range(self.numGhosts):
             if noisyDistances[i] == None:
                 cap_i_pos = self.getJailPosition(i)
                 print "cap i pos", cap_i_pos
-                self.particles  = [self.getParticleWithGhostInJail\
-                                       (p, i ) for p in self.particles]
+                self.particles  = [self.getParticleWithGhostInJail(p, i ) for p in self.particles]
 
 
                 #self.particles = [self.getJailPosition()] * self.numParticles
+        #find weights of all particles
 
         for p in self.particles:
             dist = util.manhattanDistance(pacmanPosition, p)
-            weights[p] += emissionModels[i][dist]
 
-            if all(i == 0 for i in weights.values()):
-                self.initializeUniformly(gameState)
-            else:
+
+
+
+        if all(i == 0 for i in weights.values()):
+            self.initializeUniformly(gameState)
+        else:
                 self.particles = [util.sample(weights) for i in self.particles]
 
     "*** END YOUR CODE HERE ***"
