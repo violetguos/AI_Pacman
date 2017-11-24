@@ -526,6 +526,13 @@ class JointParticleFilter:
         "*** YOUR CODE HERE ***"
         sample = []
 
+        #Matrix: joint distribution
+        #(0.0) ... (n,n)
+
+        #
+        #
+        #P (Ga, Gb | Ea, Eb)
+
         numPar = self.numParticles
         cart_prod = itertools.product(self.legalPositions)
         size_pos = len(cart_prod)
@@ -607,7 +614,7 @@ class JointParticleFilter:
         print "noisy dist 1 ", type(noisyDistances[0])
         if len(noisyDistances) < self.numGhosts:
             return
-        emissionModels = [busters.getObservationDistribution(dist) for dist in noisyDistances]
+        emissionModels = [busters.getObservationDistribution(dist) for dist in noisyDistances] #p(Et | Gt)
         print "emi model ", type(emissionModels)
         print "emi model 1", type(emissionModels[0])
         "*** YOUR CODE HERE ***"
@@ -686,7 +693,7 @@ class JointParticleFilter:
               This method alters the gameState by placing the ghosts in the
               supplied positions.
 
-          2) getPositionDistributionForGhost(gameState, ghostIndex, agent)
+          2) getPositionDistributionForGhost(gameState, ghostIndex, agent)v P(Gt ^a |Gt-1) * P(Gt ^b | Gt-1)
               This method uses the supplied ghost agent to determine what
               positions a ghost (ghostIndex) controlled by a particular agent
               (ghostAgent) will move to in the supplied gameState.  All ghosts
