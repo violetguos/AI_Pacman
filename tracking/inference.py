@@ -327,6 +327,7 @@ class ParticleFilter(InferenceModule):
     def __init__(self, ghostAgent, numParticles=300):
         InferenceModule.__init__(self, ghostAgent);
         self.setNumParticles(numParticles)
+        self.particles = None
 
     def setNumParticles(self, numParticles):
         self.numParticles = numParticles
@@ -349,8 +350,9 @@ class ParticleFilter(InferenceModule):
         "*** YOUR CODE HERE ***"
         sample = []
         size_pos = len(self.legalPositions)
+
         i = 0
-        while i < size_pos:
+        while i < self.numParticles:
             sample += [self.legalPositions[i % size_pos]]
             i+=1
         self.particles = sample
@@ -391,7 +393,7 @@ class ParticleFilter(InferenceModule):
         "*** YOUR CODE HERE ***"
         weights = util.Counter()
         #print "line  393", type(self.particles[-1])
-        if noisyDistance == None:
+        if noisyDistance is None:
             self.particles = [self.getJailPosition()] * self.numParticles
         else:
             for p in self.particles:
@@ -401,7 +403,6 @@ class ParticleFilter(InferenceModule):
             if all(i == 0 for i in weights.values()):
                 self.initializeUniformly(gameState)
             else:
-
                 self.particles = [util.sample(weights) for i in self.particles]
 
 
@@ -423,9 +424,9 @@ class ParticleFilter(InferenceModule):
         a belief distribution.
         """
         "*** YOUR CODE HERE ***"
-        for pos, prob in enumerate(self.particles):
-            newDist = self.getPositionDistribution(self.setGhostPosition(gameState, prob))
-            self.particles[pos] = util.sample(newDist)
+        for index, pos in enumerate(self.particles):
+            newDist = self.getPositionDistribution(self.setGhostPosition(gameState, pos))
+            self.particles[index] = util.sample(newDist)
         #print "line 429", type(self.particles[-1])
         "*** END YOUR CODE HERE ***"
 
@@ -443,7 +444,6 @@ class ParticleFilter(InferenceModule):
         allProbability = util.Counter()
         #print " parti p ", type(self.particles[-1])
         for p in self.particles:
-
             allProbability[p] +=1
         allProbability.normalize()
         return allProbability   # allProbability
