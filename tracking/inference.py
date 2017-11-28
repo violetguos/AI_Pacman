@@ -531,19 +531,13 @@ class JointParticleFilter:
         #P (Ga, Gb | Ea, Eb)
 
         numPar = self.numParticles
-        cart_prod = itertools.product(self.legalPositions,  repeat = self.numGhosts)
-        size_pos = len(cart_prod)
+        cart_prod = list(itertools.product(self.legalPositions, repeat = self.numGhosts))
         random.shuffle(cart_prod)
 
         i = 0
-        while numPar > 0 and i < numPar:
-            if numPar > size_pos:
-                sample += cart_prod[i % size_pos]
-                numPar -= size_pos
-            else:
-                sample += cart_prod[i % size_pos]
-                numPar = 0
-
+        while i < numPar:
+            sample += [cart_prod[i % len(cart_prod)]]
+            i += 1
         self.particles = sample
         "*** END YOUR CODE HERE ***"
 
@@ -607,14 +601,15 @@ class JointParticleFilter:
         """
         pacmanPosition = gameState.getPacmanPosition()
         noisyDistances = gameState.getNoisyGhostDistances()
-        print "noisy dist ", type(noisyDistances)
-        print "noisy dist 1 ", type(noisyDistances[0])
+        #print "noisy dist ", type(noisyDistances)
+        # noisyDistances is a list of ints
+        #print "noisy dist 1 ", type(noisyDistances[0])
         if len(noisyDistances) < self.numGhosts:
             return
         emissionModels = [busters.getObservationDistribution(dist) for dist in noisyDistances] #p(Et | Gt)
-        print "emi model ", type(emissionModels)
-        print "emi model 1", type(emissionModels[0])
-
+        #print "emi model ", type(emissionModels)
+        #print "emi model 1", type(emissionModels[0])
+        # emissionModels is a list of util.Counter
 
 
         "*** YOUR CODE HERE ***"
@@ -632,12 +627,12 @@ class JointParticleFilter:
 
         for p in self.particles: #p contains ghosts
             prob = 1
-            for idx, ghost, model, dist in range(self.numGhosts), p, emissionModels, noisyDistances:
+            for idx, ghost, model, dist in zip(range(self.numGhosts), p, emissionModels, noisyDistances):
                 if dist is None:
                     if ghost != self.getJailPosition(idx):
                         prob = 0
                 else:
-                    dist = util.manhattanDistance(pacmanPosition, p)
+                    dist = util.manhattanDistance(pacmanPosition, ghost)
                     prob *= model[dist]
             weights[p] += prob
 
