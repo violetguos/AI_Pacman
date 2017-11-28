@@ -709,14 +709,14 @@ class JointParticleFilter:
             # now loop through and update each entry in newParticle...
 
             "*** YOUR CODE HERE ***"
-            for i in range(self.numGhosts):
+            #print newParticle
+            for index, p in enumerate(newParticle):
                 newPosDist = getPositionDistributionForGhost(
-                    setGhostPositions(gameState, newParticle[i]), i, self.ghostAgents[i]
-                )
-                newParticle[i] = self.getParticleWithGhostInJail(newParticle[i], i)
-
-
-
+                    setGhostPositions(gameState, newParticle), index , self.ghostAgents[index])
+                if all(i == 0 for i in newPosDist.values()):
+                    self.initializeParticles()
+                #else:
+                    #newParticles.append(newParticle)
             "*** END YOUR CODE HERE ***"
             newParticles.append(tuple(newParticle))
         self.particles = newParticles

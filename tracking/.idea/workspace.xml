@@ -14,8 +14,8 @@
       <file leaf-file-name="inference.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="635" column="43" lean-forward="true" selection-start-line="635" selection-start-column="43" selection-end-line="635" selection-end-column="43" />
+            <state relative-caret-position="-63">
+              <caret line="717" column="16" lean-forward="false" selection-start-line="717" selection-start-column="16" selection-end-line="717" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -392,8 +392,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="635" column="43" lean-forward="true" selection-start-line="635" selection-start-column="43" selection-end-line="635" selection-end-column="43" />
+        <state relative-caret-position="-63">
+          <caret line="717" column="16" lean-forward="false" selection-start-line="717" selection-start-column="16" selection-end-line="717" selection-end-column="16" />
           <folding />
         </state>
       </provider>
