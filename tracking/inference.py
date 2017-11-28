@@ -632,8 +632,8 @@ class JointParticleFilter:
                     if ghost != self.getJailPosition(idx):
                         prob = 0
                 else:
-                    dist = util.manhattanDistance(pacmanPosition, ghost)
-                    prob *= model[dist]
+                    man_dist = util.manhattanDistance(pacmanPosition, ghost)
+                    prob *= model[man_dist]
             weights[p] += prob
 
         if all(i == 0 for i in weights.values()):
