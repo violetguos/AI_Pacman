@@ -348,16 +348,11 @@ class ParticleFilter(InferenceModule):
         """
         "*** YOUR CODE HERE ***"
         sample = []
-        numPar = self.numParticles
         size_pos = len(self.legalPositions)
-        while numPar > 0:
-            if numPar > size_pos:
-                sample +=self.legalPositions
-                numPar -= size_pos
-            else:
-                sample += self.legalPositions
-                numPar = 0
-
+        i = 0
+        while i < size_pos:
+            sample += [self.legalPositions[i % size_pos]]
+            i+=1
         self.particles = sample
         "*** END YOUR CODE HERE ***"
 
@@ -395,6 +390,7 @@ class ParticleFilter(InferenceModule):
         pacmanPosition = gameState.getPacmanPosition()
         "*** YOUR CODE HERE ***"
         weights = util.Counter()
+        #print "line  393", type(self.particles[-1])
         if noisyDistance == None:
             self.particles = [self.getJailPosition()] * self.numParticles
         else:
@@ -405,6 +401,7 @@ class ParticleFilter(InferenceModule):
             if all(i == 0 for i in weights.values()):
                 self.initializeUniformly(gameState)
             else:
+
                 self.particles = [util.sample(weights) for i in self.particles]
 
 
@@ -426,12 +423,10 @@ class ParticleFilter(InferenceModule):
         a belief distribution.
         """
         "*** YOUR CODE HERE ***"
-        #util.raiseNotDefined()
-        newParticles = []
         for pos, prob in enumerate(self.particles):
             newDist = self.getPositionDistribution(self.setGhostPosition(gameState, prob))
-            self.particles[pos] = newDist
-
+            self.particles[pos] = util.sample(newDist)
+        #print "line 429", type(self.particles[-1])
         "*** END YOUR CODE HERE ***"
 
 
@@ -446,7 +441,9 @@ class ParticleFilter(InferenceModule):
         "*** YOUR CODE HERE ***"
         #util.raiseNotDefined()
         allProbability = util.Counter()
+        #print " parti p ", type(self.particles[-1])
         for p in self.particles:
+
             allProbability[p] +=1
         allProbability.normalize()
         return allProbability   # allProbability
@@ -534,17 +531,17 @@ class JointParticleFilter:
         #P (Ga, Gb | Ea, Eb)
 
         numPar = self.numParticles
-        cart_prod = itertools.product(self.legalPositions)
+        cart_prod = itertools.product(self.legalPositions,  repeat = self.numGhosts)
         size_pos = len(cart_prod)
+        random.shuffle(cart_prod)
 
-        while numPar > 0:
+        i = 0
+        while numPar > 0 and i < numPar:
             if numPar > size_pos:
-                random.shuffle(cart_prod)
-                sample += cart_prod
+                sample += cart_prod[i % size_pos]
                 numPar -= size_pos
             else:
-                random.shuffle(cart_prod)
-                sample += cart_prod
+                sample += cart_prod[i % size_pos]
                 numPar = 0
 
         self.particles = sample
@@ -617,15 +614,17 @@ class JointParticleFilter:
         emissionModels = [busters.getObservationDistribution(dist) for dist in noisyDistances] #p(Et | Gt)
         print "emi model ", type(emissionModels)
         print "emi model 1", type(emissionModels[0])
+
+
+
         "*** YOUR CODE HERE ***"
         weights = util.Counter()
-
         #move ghosts into jail
         for i in range(self.numGhosts):
             if noisyDistances[i] == None:
-                cap_i_pos = self.getJailPosition(i)
-                print "cap i pos", cap_i_pos
-                self.particles  = [self.getParticleWithGhostInJail(p, i ) for p in self.particles]
+                #cap_i_pos = self.getJailPosition(i)
+                #print "cap i pos", cap_i_pos
+                self.particles  = [self.getParticleWithGhostInJail(p, i) for p in self.particles]
 
 
                 #self.particles = [self.getJailPosition()] * self.numParticles
@@ -633,18 +632,23 @@ class JointParticleFilter:
 
         for p in self.particles: #p contains ghosts
             prob = 1
-            for idx, model, distance in zip(range(len(p), emissionModels, noisyDistances)):
-                if distance == None:
-                    prob = 0
+            for idx, ghost, model, dist in range(self.numGhosts), p, emissionModels, noisyDistances:
+                if dist is None:
+                    if ghost != self.getJailPosition(idx):
+                        prob = 0
                 else:
-                    dist = util.manhattanDistance(pacmanPosition, p[idx])
-                    prob += model[dist]
-            weights[p] *=prob
-
-
+                    dist = util.manhattanDistance(pacmanPosition, p)
+                    prob *= model[dist]
+            weights[p] += prob
 
         if all(i == 0 for i in weights.values()):
-            self.initializeUniformly(gameState)
+            self.initializeParticles()
+            for i in range(self.numGhosts):
+                if noisyDistances[i] == None:
+                    # cap_i_pos = self.getJailPosition(i)
+                    # print "cap i pos", cap_i_pos
+                    self.particles = [self.getParticleWithGhostInJail(p, i) for p in self.particles]
+
         else:
             self.particles = [util.sample(weights) for i in self.particles]
 
@@ -710,6 +714,13 @@ class JointParticleFilter:
             # now loop through and update each entry in newParticle...
 
             "*** YOUR CODE HERE ***"
+            for i in range(self.numGhosts):
+                newPosDist = getPositionDistributionForGhost(
+                    setGhostPositions(gameState, newParticle[i]), i, self.ghostAgents[i]
+                )
+                newParticle[i] = self.getParticleWithGhostInJail(newParticle[i], i)
+
+
 
             "*** END YOUR CODE HERE ***"
             newParticles.append(tuple(newParticle))
