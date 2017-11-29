@@ -715,8 +715,8 @@ class JointParticleFilter:
                     setGhostPositions(gameState, newParticle), index , self.ghostAgents[index])
                 if all(i == 0 for i in newPosDist.values()):
                     self.initializeParticles()
-                #else:
-                    #newParticles.append(newParticle)
+                else:
+                    newParticle[index] = util.sample(newPosDist)
             "*** END YOUR CODE HERE ***"
             newParticles.append(tuple(newParticle))
         self.particles = newParticles
