@@ -1,5 +1,7 @@
 # CSP
-A class of csp solvers. Used to solve n-queens and soduku
+A class of csp solvers. Used to solve n-queens and soduku.
+* Forward checking
+* Backpropagation
 
 # Pacman AI
 ## Search
@@ -12,8 +14,8 @@ A class of csp solvers. Used to solve n-queens and soduku
 * Food heuristic for max reward
 
 ## multiagent
-Implemented mini-max with alpha beta pruning
+Implemented mini-max game tree with alpha beta pruning and expectimax
 
 ## tracking
-Multi agent probabilistic HMM 
+Multi agent probabilistic Hidden Markov Model 
 
