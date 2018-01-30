@@ -1,5 +1,5 @@
 # CSP
-An abstract class of csp solvers. Used to solve n-queens and soduku.
+`csp`: An abstract class of csp solvers. Used to solve n-queens and soduku.
 * Forward checking
 * Backpropagation
 
